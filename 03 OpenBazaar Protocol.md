@@ -54,11 +54,16 @@ The trade protocol describes a set of fundamental rules that govern decentralise
 
 ### 3.2.1 Bitcoin Payments and Escrow
 
-We need _trade flow_ plans for the 3 payment options:
+_OpenBazaar_ will support four payment options with Bitcoin:
 
 1. Direct payment
+    + Alice transfers bitcoin to Bob in a simple payment
 2. Double-deposit 'MAD' escrow
+    + Alice and Bob create a 2-of-2 multisignature escrow address
+    + Alice and Bob need to agree to release funds from that address
 3. Notary escrow
+    + Alice, Bob, and Charlie (a third party 'notary') create a 2-of-3 multisignature escrow address
+    + Two members of this party are required to release funds from the address
 4. Notary pooled escrow
 
 Of the three payments options, _direct payment_ and _MAD escrow_, have **no dispute resolution** mechanism and zero redundancy if keys are lost. However, their use in OpenBazaar can be justified within the following scenarios:
