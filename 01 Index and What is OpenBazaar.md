@@ -1,11 +1,11 @@
 ![OpenBazaar Documentation](https://openbazaar.org/assets/img/logo.png)
 
-OpenBazaar Documentation
+_OpenBazaar_ Documentation
 ===
 
 # Index
 
-1. What is OpenBazaar?
+1. What is _OpenBazaar_?
 	+ What does it do?
 	+ What does it enable?
 	+ What problems does it solve?
@@ -20,14 +20,14 @@ OpenBazaar Documentation
 		+ Merchant
 		+ Buyer
 		+ Notary
-3. How does OpenBazaar work?
+3. _OpenBazaar_ Protocol?
 	+ 3.1 Peer-to-peer network
 	+ 3.2 Trade Protocol
-	+ 3.3 The OpenBazaar Application
+	+ 3.3 The _OpenBazaar_ Application
 	+ 3.4 Ratings, Reviews and Reputation
-	+ 3.5 A Pseudonymous Trust System in OpenBazaar
+	+ 3.5 A Pseudonymous Trust System in _OpenBazaar_
 	+ 3.6 Dispute Resolution
-4. OpenBazaar Marketplaces
+4. _OpenBazaar_ Marketplaces
 	+ 4.1 Physical and Digital Ecommerce
 	+ 4.2 Services
 	+ 4.3 Lending
@@ -41,22 +41,22 @@ OpenBazaar Documentation
 	+ 6.1 Web Socket API
 7. Articles
 	+ 7.1 Threat Model
-	+ 7.2 OpenBazaar and Subspace
+	+ 7.2 _OpenBazaar_ and Subspace
 8. Reference Documenation
 9. Frequently Asked Questions
 
-# 1. What is OpenBazaar?
+# 1. What is _OpenBazaar_?
 
-[OpenBazaar](https://openbazaar.org) is a new way to buy and sell goods and services online. By running a program on your computer, you can connect directly to other users in the OpenBazaar network and trade with them. 
-The network isn't controlled by a company or organisation. OpenBazaar is a decentralised peer-to-peer network, which means there are no listing fees and the marketplace is censorship-resistant.
+[OpenBazaar](https://openbazaar.org) is a new way to buy and sell goods and services online. By running a program on your computer, you can connect directly to other users in the _OpenBazaar_ network and trade with them. 
+The network isn't controlled by a company or organisation. _OpenBazaar_ is a decentralised peer-to-peer network, which means there are no listing fees and the marketplace is censorship-resistant.
 
-Goods and services are bought and sold on OpenBazaar using Bitcoin, a digital cryptocurrency that is decentralised and censorship-resistant. Transaction fees on the Bitcoin network are typically less than a dollar.
+Goods and services are bought and sold on _OpenBazaar_ using Bitcoin, a digital cryptocurrency that is decentralised and censorship-resistant. Transaction fees on the Bitcoin network are typically less than a dollar.
 
-**Bitcoin and OpenBazaar together are the future on online commerce.**
+**Bitcoin and _OpenBazaar_ together are the future on online commerce.**
 
 Right now, online commerce means using centralized services. eBay, Amazon, and other big companies have restrictive policies and charge fees for listing and selling goods. They only accept forms of payment that cost both buyers and sellers money, such as credit cards or PayPal. They require personal information, which can lead to it being stolen or even sold to others for advertising or worse. Buyers and sellers aren’t always free to exchange goods and services with each other, as companies and governments censor entire categories of trade.
 
-OpenBazaar is a different approach to online commerce. It puts the power back in the users’ hands. Instead of buyers and sellers going through a centralized service, OpenBazaar connects them directly. Because there is no one in the middle of the transactions, there are no fees, no one can censor transactions, and you only reveal the personal information that you choose.
+_OpenBazaar_ is a different approach to online commerce. It puts the power back in the users’ hands. Instead of buyers and sellers going through a centralized service, _OpenBazaar_ connects them directly. Because there is no one in the middle of the transactions, there are no fees, no one can censor transactions, and you only reveal the personal information that you choose.
 
 This project is [open source](https://github.com/openbazaar/openbazaar), which means the code is publicly available for people to review or audit, as well as contribute code to make it better.
 
@@ -88,7 +88,7 @@ This project is [open source](https://github.com/openbazaar/openbazaar), which m
 ## What is the philosophy of the project?
 
 + Our **vision** is to _make trade free_. 
-+ Our **mission** is to _shift global trade onto a decentralised platform_, OpenBazaar.
++ Our **mission** is to _shift global trade onto a decentralised platform_, _OpenBazaar_.
 + Our values are:
 	1. Privacy
 		+ Users should full control their data
@@ -98,6 +98,6 @@ This project is [open source](https://github.com/openbazaar/openbazaar), which m
 		+ Encryption, encryption, encryption
 	3. Markets
 		+ Free and open markets
-		+ Creating open and competitive markets for services in OpenBazaar that cannot be perfectly solved with technology
+		+ Creating open and competitive markets for services in _OpenBazaar_ that cannot be perfectly solved with technology
 	4. Bitcoin
-		+ Bitcoin is the **only** transactional currency of OpenBazaar
+		+ Bitcoin is the **only** transactional currency of _OpenBazaar_

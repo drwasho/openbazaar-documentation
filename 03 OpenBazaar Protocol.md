@@ -1,54 +1,77 @@
-# 3. How does OpenBazaar work?
+# 3. _OpenBazaar_ Protocol
 
-OpenBazaar is a marketplace platform compromised of the following compoenents:
+_OpenBazaar_ is a marketplace platform compromised of the following components:
 
-1. The Kademlia-style peer-to-peer (P2P) Network (i.e. the network plumbing)
-2. The Trade Protocol (i.e. the fundamental rules governing a type trade between peers)
-3. The Client/App (i.e. what the users interact with to execute trade)
+1. **The Kademlia-style Peer-to-Peer (P2P) Network**
+    + _The network architecture governing peer-to-peer connections_ 
+2. **The Trade Protocol**
+    + _The fundamental rules governing the type trade between peers_
+3. **The Application**
+    + _How a users access the network and executes the trades protocol_
 
-Users download the OpenBazaar **application** to access the **network** and execute the **trade protocol** with other users on the network.
+Users download the _OpenBazaar_ `application` to access the `network` and execute the `trade protocol` with other users on the network.
 
-## 3.1 Peer-to-peer network
+## 3.1 Peer-to-Peer Network
 
-The OpenBazaar network is the backbone of the project. It is designed to be scalable, supporting millions of people finding goods and services offered by fellow peers, who could be located anywhere in the world.
+The _OpenBazaar_ network is the backbone of the project. It is designed to be scalable, supporting millions of people finding goods and services offered by fellow peers, who could be located anywhere in the world.
 
-The Kademlia-style architecture theoretically supports this vision, and has a track-record of doing so, as seen by BitTorrent. The chief engineering difficulty of building OpenBazaar has come from implementing this component.
+The Kademlia-style architecture theoretically supports this vision, and has a track-record of connecting millions of peers as demonstrated by BitTorrent. The chief engineering difficulty of building _OpenBazaar_ historically has been implementing this component.
 
-The Kademlia-style p2p network is older and distinct from the Bitcoin blockchain. In brief, a random number is generated to obtain a private key. From this key, a public key is derived, which is then mathematically processed to create a global unique identifier (GUID). This GUID is virtually impossible to forge and is the basis of your pseudonymous identity on the network.
+The Kademlia-style P2P network is older and distinct from the Bitcoin blockchain. To create a node, a network identity or global unique identifier (GUID) needs to be created. Firstly, random number is generated between a range of 1 to 2<sup>256</sup> to obtain a _private key_. From this key, a _public key_ is derived.
 
-The GUID is mapped to your dynamic IP address and port on a distributed hash table (DHT). This is not a distributed ledger like the blockchain, but a local 'map' of GUIDs (peers) and their IP addresses in your 'bucket' ('bucket' defined as similar GUIDs within a defined range). Each peer's DHT allows anyone on the network to find the location of a specific peer in only a few hops (i.e. think 6 degrees of separation). On this basis, peers can connect to each other to exchange data.
+The _public key_ is then digitally signed with the the _private key_ (self-signature) and `sha256` hashed. The resulting hex is then further hashed by `RIPEMD160` to generate the **GUID**. This GUID is impossible to forge or spoof without compromising the private key, and is the basis of a node's pseudonymous identity on the network.
+
+> **GUID** = RIPEMD160(SHA256(self-signed _pubkey_))
+
+The GUID is mapped to your dynamic IP address and port on a _distributed hash table_ (DHT). This is not a distributed ledger like the blockchain, but a local 'map' of GUIDs (peers) and their IP addresses in your 'bucket' ('bucket' defined as similar GUIDs within a defined range). Each peer's DHT allows anyone on the network to find the location of a specific peer in only a few hops (i.e. think 6 degrees of separation). On this basis, peers can connect to each other to exchange data.
 
 The network allows for a GUID to be associated with more than just an IP address, but other attribute-value pairs that can be searched (i.e. decentralized search).
 
-In OpenBazaar, the DHT lists GUID hashes of contracts that the a peer (GUID) is selling and keywords that are associated with that contract. This enables other peers to decentrally search the network for specific contracts by their hash and/or keyword, compiling a list of relevant hits and their corresponding GUIDs. The user can then select the peer and directly access their store to commence trade.
+In _OpenBazaar_, the DHT lists GUID hashes of contracts that the a peer (GUID) is selling and keywords that are associated with that contract. This enables other peers to decentrally search the network for specific contracts by their hash and/or keyword, compiling a list of relevant hits and their corresponding GUIDs. The user can then select the peer and directly access their store to commence trade.
 
 The overall features of this architecture are:
 
-1. Minimal resources are required to run an OpenBazaar node (relative to Bitcoin)
+1. Minimal resources are required to run an _OpenBazaar_ node (relative to Bitcoin)
 2. Scalable to millions of users
-3. Avoids blockchain bloat, uses Bitcoin only as a currency for decentralised trade (as it should be)
-4. Contracts (listings) are hosted on the merchant's node. Enables rapid listings, as distributed consensus isn't required to list goods/services (i.e. users don't have to download other people's contracts)
+3. Uses Bitcoin only as a currency for decentralised trade
+4. Contracts (listings) are hosted on the merchant's node. 
+  + Enables rapid listings, as distributed consensus isn't required to list goods/services
 
-This design does have some drawbacks, which third party services (or technological innovation) can address:
+This design does have some drawbacks, which third party services (or future technological innovation) can address:
 
 1. Nodes are required to remain online for listings to be accessible by peers
-  - The project is exploring using the DHT as a temporary cache for listing contracts and placing asynchronous orders 
+  - The project is exploring using the DHT as a temporary cache for listing contracts and placing asynchronous encrypted orders 
 2. Nodes can be targeted (hackers, spammers, governments) on the basis of what they are listing, although the marketplace and protocol remain censorship-resistant
 
 Presently, both TCP/IP AND rUDP are used to to make connections between peers. The rUDP-based connections tend to overcome NATs (network address translation) and other obstacles preventing peers from accessing the network, and thus avoiding complicated port forwarding requirements beyond the skills of most users. This also means that these connections cannot be easily used through TOR to obfuscate the true IP address of a node.
 
 ## 3.2 Trade Protocol
 
-The trade protocol describes a set of fundamental rules that govern decentralised trade on OpenBazaar. The protocol is made up of two major sub-components:
+The trade protocol describes a set of fundamental rules that govern decentralised trade on _OpenBazaar_. The protocol is made up of two major sub-components:
 
-1. Bitcoin payments and escrow
-2. Ricardian contracts
+1. Bitcoin Payments and Escrow
+2. Ricardian Contracts
 
-## 3.2.1 Bitcoin paymanets and escrow
+### 3.2.1 Bitcoin Payments and Escrow
 
-OpenBazaar is built for bitcoin, particularly multisignature transactions that enable an innovative form of multiparty escrow. Briefly, multiparty escrow is achieved by creating a unique bitcoin address from individual Bitcoin pubkeys belong to each party involved in the trade.
+We need _trade flow_ plans for the 3 payment options:
 
-In OpenBazaar, these parties are the merchant, buyer and notary. The multisignature address requires a minimum of 2 out of 3 digital signature (i.e. votes) to release funds from the escrow address to pay the merchant or refund the buyer.
+1. Direct payment
+2. Double-deposit 'MAD' escrow
+3. Notary escrow
+4. Notary pooled escrow
+
+Of the three payments options, _direct payment_ and _MAD escrow_, have **no dispute resolution** mechanism and zero redundancy if keys are lost. However, their use in OpenBazaar can be justified within the following scenarios:
+
+1. _Direct payment_ from well-established merchants and with high reputation; presumption is that the buyer possesses a high degree of trust to the merchant.
+2. _MAD escrow_ between two parties who want to transact directly without any third party involvement, but do not share a high degree of trust. These users are assumed to have an above average level of technical skill to manage risks such as key loss or incapacitation, and who have a firm understanding of the implications of a failed trade.
+
+
+_OpenBazaar_ is built for Bitcoin, particularly multisignature transactions that enable an innovative form of **multiparty or multisignature escrow**. Multiparty escrow is achieved by creating a unique bitcoin address from individual Bitcoin pubkeys belong to each party involved in the trade.
+
+A higher level description of multisignature transactions can be found in the [Bitcoin documentation](https://bitcoin.org/en/developer-guide#escrow-and-arbitration).
+
+In _OpenBazaar_, these parties are the merchant, buyer and notary. The multisignature address requires a minimum of 2 out of 3 digital signature (i.e. votes) to release funds from the escrow address to pay the merchant or refund the buyer.
 
 Individual pubkeys from each party are derived from a hierarchical deterministic seed to avoid address reuse and efficiently manage the signing keys. All signing keys can be recovered from the seed in the node is inadvertently destroyed or lost.
 
@@ -69,14 +92,14 @@ Alternative, third party services can be used to either: 1) convert altcoins int
 
 Ricardian contracts (RCs) are digital documents that record an agreement between multiple parties, which are signed and cryptographically verified, and formatted to be human and machine-readable. The one-way hash of RC establish a tamper-proof receipt of the terms and conditions of a trade, which eliminates potential disputes that may arise from hearsay claims between counterparties.
 
-To be 'machine readable', the terms and conditions are formatted in JSON with a hierarchy of attribute-value pairs: the contract schema. As there are multiple types of trade that OpenBazaar aims to support, each will have its own contract schema. Common to all schemas are four modules:
+To be 'machine readable', the terms and conditions are formatted in JSON with a hierarchy of attribute-value pairs: the contract schema. As there are multiple types of trade that _OpenBazaar_ aims to support, each will have its own contract schema. Common to all schemas are four modules:
 
 1. Metadata module
 2. ID module
 3. Trade module
 4. Ledger module
 
-Ricardian contracts in OpenBazaar will typically have one metadata, trade and ledger module. Multiple ID modules are required to represent each party in the trade (at least 1 merchant, buyer, and notary).
+Ricardian contracts in _OpenBazaar_ will typically have one metadata, trade and ledger module. Multiple ID modules are required to represent each party in the trade (at least 1 merchant, buyer, and notary).
 
 #### Metadata module 
 
@@ -285,7 +308,7 @@ Below is the contract schema for the sale for a physical good at a fixed price:
 
 Note: future articles will breakdown the component parts of the contract and how they should be used.
 
-Within the `ledger` section of the contract, the _signing order_ is divided into several stages. Each stage immediately identifies the party responsible for filling the empty data fields. The user signs the contract and forwards it to the next user in the ledger. The user won't be required to manually send it to the user in the ledger. Rather, the client will verify the signatures first before sending the signed contract to the next party. In a loose sense, this enables *OpenBazaar* Ricardian contracts to adopt some 'smart' characteristics.
+Within the `ledger` section of the contract, the _signing order_ is divided into several stages. Each stage immediately identifies the party responsible for filling the empty data fields. The user signs the contract and forwards it to the next user in the ledger. The user won't be required to manually send it to the user in the ledger. Rather, the client will verify the signatures first before sending the signed contract to the next party. In a loose sense, this enables *_OpenBazaar_* Ricardian contracts to adopt some 'smart' characteristics.
 
 An abstraction of the signing order:
 
@@ -297,9 +320,9 @@ The _signing order_ should be defined in the structure of the JSON contract.
 
 #### 1. Voting Pools
 
-Consider a typical exchange between two parties with an arbiter mediating the transaction, where a 2-of-3 multisignature address is generated. The buyer in this exchange sends bitcoins to the multisignature address, to be released upon the pre-agreed conditions with the seller. While seller or arbiter alone cannot steal these funds, there remains a non-zero risk of collusion between them to defraud the buyer. Unfortunately, soley relying upon reputation systems is not an adequate solution this problem, no matter how well designed. An effective strategy is to minimise the risk of collusion by adding more arbiters to the mix, a *voting pool*. A majority vote by the pool of arbiters makes it more difficult for a corrupted arbiter to defraud the transaction, and is thus a favorable means of managing risk for high value exchanges in *OpenBazaar*.
+Consider a typical exchange between two parties with an arbiter mediating the transaction, where a 2-of-3 multisignature address is generated. The buyer in this exchange sends bitcoins to the multisignature address, to be released upon the pre-agreed conditions with the seller. While seller or arbiter alone cannot steal these funds, there remains a non-zero risk of collusion between them to defraud the buyer. Unfortunately, soley relying upon reputation systems is not an adequate solution this problem, no matter how well designed. An effective strategy is to minimise the risk of collusion by adding more arbiters to the mix, a *voting pool*. A majority vote by the pool of arbiters makes it more difficult for a corrupted arbiter to defraud the transaction, and is thus a favorable means of managing risk for high value exchanges in *_OpenBazaar_*.
 
-*Voting pools* in *OpenBazaar* would be created from the list of *preferred arbiters* from the buyer and seller's profile. In the case of an uneven number of arbiters within the pool, the benefit of the doubt goes to chance with the client randomly selecting a well-ranked arbiter. The total size of voting pool is limited to the [maximum number](https://bitcointa.lk/threads/number-of-m-of-n-ouputs-per-transaction.305146/page-2) of parties in a multisignature transaction on the Bitcoin network. An important element in forming a *voting pool* is to prevent the risk of a 'sore loser attack', where the multisignature transaction is constructed without the possiblity of the seller and the arbiters recovering the funds if the buyer fails to initiate the transaction, after receiving a good or losing a bet for example.
+*Voting pools* in *_OpenBazaar_* would be created from the list of *preferred arbiters* from the buyer and seller's profile. In the case of an uneven number of arbiters within the pool, the benefit of the doubt goes to chance with the client randomly selecting a well-ranked arbiter. The total size of voting pool is limited to the [maximum number](https://bitcointa.lk/threads/number-of-m-of-n-ouputs-per-transaction.305146/page-2) of parties in a multisignature transaction on the Bitcoin network. An important element in forming a *voting pool* is to prevent the risk of a 'sore loser attack', where the multisignature transaction is constructed without the possiblity of the seller and the arbiters recovering the funds if the buyer fails to initiate the transaction, after receiving a good or losing a bet for example.
 
 Notary pools decrease the overall risk of collusion and increase the redunancy of transactions, a multisignature escrow address is made up of several additional parties on top of the <font color="red">merchant</font> and <font color="blue">buyer</font>. For example, an 8-of-15 multisignature escrow address can be created made up of:
 
@@ -315,7 +338,7 @@ Notary pools can be designed according to the 'Lucas Algorithim':
 
 > Two traders, Alice and Bob, require equal number ("n") of keys, as you do not know a priori who will win the trade (or bet). In general, Alice needs "n" keys, Bob needs "n" keys, and the jury needs "2n - 1" keys. The majority of 2n - 1 is always n. In the simplest case, Alice has one key, Bob has one key, and the jury size (2x1 - 1) is one (i.e., the arbiter decides with Alice or with Bob). In the above example, n = 4. Alice has 4 keys, Bob has 4 keys, and the jury size = (2x4 - 1) = 7. The "best of 7" is of course 4 (= n). The total number of keys is 4n - 1 = 15. The multisig is therefore 8 of 15, which is achieved with Bob + Alice, or Alice + voting pool (majority thereof), or Bob + voting pool (majority thereof). These numbers should work with any integer n > 0.
 
-Interaction of the notary pool with the arbiter is managed over the *OpenBazaar* application:
+Interaction of the notary pool with the arbiter is managed over the *_OpenBazaar_* application:
 
 <img src="http://s25.postimg.org/t60swkc3z/Arbitration.jpg" width="800px">
 
@@ -330,7 +353,7 @@ In more complex settlements, where both parties receive a portion of the funds, 
 
 #### 2. Accredited Notaries
 
-Even with a notary pool, the question remains how users will choose notaries within *OpenBazaar*? The most direct way is for users to access the storefront of other nodes in the network, select the 'services' tab and manually add them to their list of preferred notaries. Users can also search for nodes on the network that they wish to add on their list. These approach however, assume that the user already knowns what node to trust as a notary.
+Even with a notary pool, the question remains how users will choose notaries within *_OpenBazaar_*? The most direct way is for users to access the storefront of other nodes in the network, select the 'services' tab and manually add them to their list of preferred notaries. Users can also search for nodes on the network that they wish to add on their list. These approach however, assume that the user already knowns what node to trust as a notary.
 
 One approach is for notaries to be *accredited* by a voluntary private orgaisation, which creates some open standards for notaries to voluntarily subject themselves to in order to earn an 'endorsement badge'. These open standards may include:
 
@@ -357,7 +380,7 @@ For example, imagine that Alice wants to sell an item to Bob that she should not
 Hash: SHA256
 
 {
-    "OpenBazaar Contract": {
+    "_OpenBazaar_ Contract": {
         "OBCv": "0.1",
         "Category": "Physical good",
         "Sub-category,": "Ask price: negotiable",
@@ -400,7 +423,7 @@ f5fTinKexZHIYhc3NyWsIGo=
 -----END PGP SIGNATURE-----
 ```
 
-Bob accesses the contract via the *OpenBazaar* client for signing. However, as both Alice and Bob want to maintain privacy in their transaction, Bob *blinds* the transaction first before sending it to the notary.
+Bob accesses the contract via the *_OpenBazaar_* client for signing. However, as both Alice and Bob want to maintain privacy in their transaction, Bob *blinds* the transaction first before sending it to the notary.
 
 Contract blinding requires the following steps to take place:
 
@@ -415,7 +438,7 @@ An example of the blinded contract:
 Hash: SHA256
 
 {
-    "OpenBazaar Contract": {
+    "_OpenBazaar_ Contract": {
         "OBCv": "0.1",
         "Category": "Physical good",
         "Sub-category,": "Ask price: negotiable",
@@ -455,9 +478,9 @@ qtnvyVGzmFn+KSSpjInBCCw=
 -----END PGP SIGNATURE-----
 ```
 
-As per the standard process, the buyer forwards the contract to the notary who adds a third digital signature to the contract. However, the notary will not be able to determine the contents of the good being sold on OB. *OpenBazaar* client, exports and emails it as an attached `.json` file directly to Bob. Bob can then who imports it into the *OpenBazaar* client. Bob signs the contract and selects a notary.
+As per the standard process, the buyer forwards the contract to the notary who adds a third digital signature to the contract. However, the notary will not be able to determine the contents of the good being sold on OB. *_OpenBazaar_* client, exports and emails it as an attached `.json` file directly to Bob. Bob can then who imports it into the *_OpenBazaar_* client. Bob signs the contract and selects a notary.
 
-## 3.3 The OpenBazaar Application
+## 3.3 The _OpenBazaar_ Application
 
 The client/app enables the user to fulfill any desired role on the network (merchant, buyer, notary, arbiter). The UI/UX will likely vary on the type of trade to be conducted. 
 
@@ -465,13 +488,13 @@ The client/app enables the user to fulfill any desired role on the network (merc
 
 ### 1. Introduction
 
-In this article we attempt to design a decentralised rating and review system for the sale of physical goods on the OpenBazaar network. Ratings and reviews are sometimes considered interchangeable with the challenge to create a global decentralised reputation system. For OpenBazaar, this is not the case as the system described here is:
+In this article we attempt to design a decentralised rating and review system for the sale of physical goods on the _OpenBazaar_ network. Ratings and reviews are sometimes considered interchangeable with the challenge to create a global decentralised reputation system. For _OpenBazaar_, this is not the case as the system described here is:
 
 1. Performance based
 2. Made on a per item basis
-3. Not applicable to other types of marketplaces built on the OpenBazaar platform
+3. Not applicable to other types of marketplaces built on the _OpenBazaar_ platform
 
-Decentralised reputation refers to the overall trustworthiness of an identity within a network. In the future, decentralised reputation can be layered over OpenBazaar if and when it is ever developed. For ratings and reviews, they are strictly concerned with the merchant performance of that identity on the network. Both systems are theoretically compatible and need to be fully developed.
+Decentralised reputation refers to the overall trustworthiness of an identity within a network. In the future, decentralised reputation can be layered over _OpenBazaar_ if and when it is ever developed. For ratings and reviews, they are strictly concerned with the merchant performance of that identity on the network. Both systems are theoretically compatible and need to be fully developed.
 
 Ratings and reviews are defined in this article as:
 1. Ratings - scores on the behavior of the merchant, the quality of the item, and shipping time.  
@@ -504,7 +527,7 @@ _For trades using mutually-assured destruction escrow addresses (i.e. 'MAD' 2-of
 **2.1.1 Sybil Attacks**
 
 - Sybil attacks can generally be mitigated by increasing the cost in resources or time to perform an action
-- In OpenBazaar, this can be achieved in a couple of ways:
+- In _OpenBazaar_, this can be achieved in a couple of ways:
   1. Demonstrating a _proof of trade_
     - Showing evidence of a trade by a triple-signed Ricardian contract (i.e. signed by merchant, buyer, and notary)
     - But this approach is not good for the privacy of the buyer
@@ -534,13 +557,13 @@ _For trades using mutually-assured destruction escrow addresses (i.e. 'MAD' 2-of
   1. Bitcoin blockchain
     - Blockchain bloat
     - Limit to how much you can store in `OP_RETURN`
-  2. OpenBazaar or Blockstore DHT
-    - The rating/review data can be embedded into `OP_RETURN` in the blockchain, which can then be used as a reference in the OpenBazaar or Blockstore DHT for the full rating and review data
-    - In the case of OpenBazaar, data embedded into the DHT can be made to confirm a certain specification to restrict space and counter some Sybil attack vectors
+  2. _OpenBazaar_ or Blockstore DHT
+    - The rating/review data can be embedded into `OP_RETURN` in the blockchain, which can then be used as a reference in the _OpenBazaar_ or Blockstore DHT for the full rating and review data
+    - In the case of _OpenBazaar_, data embedded into the DHT can be made to confirm a certain specification to restrict space and counter some Sybil attack vectors
     - The incentive structure for running a node on the Blockstore DHT is unclear for now
     - Also unclear how robust and persistent data storage will be on either DHT, or how some Sybil-spam attacks will be mitigated
   3. ChainDB
-    - Parallel network must be run alongside OpenBazaar to push ratings into the database
+    - Parallel network must be run alongside _OpenBazaar_ to push ratings into the database
     - In effect creating a crypto-asset just to make a rating: overkill
     - Project is still a theory for now, nothing implemented or tested
   4. Namecoin (or another blockchain)
@@ -550,7 +573,7 @@ _For trades using mutually-assured destruction escrow addresses (i.e. 'MAD' 2-of
     - Limit to how much data you can store onto Namecoin
   5. Subspace
     - Storage must be paid for on the Subspace network over time
-    - Parallel network to Bitcoin and OpenBazaar
+    - Parallel network to Bitcoin and _OpenBazaar_
 
 There is no magic bullet, any choice is associated with different trade-offs.
 
@@ -561,8 +584,8 @@ There is no magic bullet, any choice is associated with different trade-offs.
 - The rating score is embedded into the blockchain via `OP_RETURN` as an extra output of the _payout transaction_ from the multisignature escrow address
   - This is the transaction that either release funds from multisig to the merchant (in a successful trade), or to the buyer as a refund (in an unsuccessful trade)
 - The rating score follows a standardised format with the following components:
-  1. OpenBazaar rating tag
-    - Concise tag to identify a transaction containing an OpenBazaar rating
+  1. _OpenBazaar_ rating tag
+    - Concise tag to identify a transaction containing an _OpenBazaar_ rating
   2. Merchant rating score - [-1,0,1] overall rating of the merchant
     - _-1_: Negative rating
     - _0_: Neutral rating
@@ -590,11 +613,11 @@ The overall size of the rating score should be around _62 bytes_, well under the
 
 > How do we determine whether a reputation score is valid, as anyone can create 100 transactions to give themselves a positive rating?
 
-- The notary is in the best position to validate whether a rating is from a valid OpenBazaar transaction
+- The notary is in the best position to validate whether a rating is from a valid _OpenBazaar_ transaction
 - The buyer can add an extra output to the payout transaction sending a microtransaction to the notary
   - The address can be called the 'rating validation address'
-  - The client can validate that the address is associated with the notary on the OpenBazaar network
-- The notary can host an open record of valid OpenBazaar transactions using `OP_RETURN` and `TXID` as the references (tied into Reviews, described below)
+  - The client can validate that the address is associated with the notary on the _OpenBazaar_ network
+- The notary can host an open record of valid _OpenBazaar_ transactions using `OP_RETURN` and `TXID` as the references (tied into Reviews, described below)
   - Bitcoin transactions that have tagged the notary erroneously can be ignored
   - These only enrich the notary as a transaction needs to be made to their address  
 
@@ -604,23 +627,23 @@ The overall size of the rating score should be around _62 bytes_, well under the
 
 - `OP_RETURN` is not large enough to store reviews, unless they are restricted to being < ~75 characters (which isn't very practical)
 - A transaction with multiple `OP_RETURN` outputs are not standard, so you'd have to store the rating and review within a single `OP_RETURN` output
-- Either the OpenBazaar or Blockstore DHT appears to be the best solution to store item reviews
+- Either the _OpenBazaar_ or Blockstore DHT appears to be the best solution to store item reviews
   - `OP_RETURN` hex containing the rating (described above) will be used as the reference hash
 - A full outline of the Blockstore protocol can be [found here](https://github.com/namesystem/blockstore).
 
 ![0](https://s3.amazonaws.com/onenameblog/openname-bitcoin-dht-diagram-4.png)
 (_Blockstore Schematic_)
 
-- A similar model would be taken to store reviews within the OpenBazaar DHT with the following features:
+- A similar model would be taken to store reviews within the _OpenBazaar_ DHT with the following features:
   1. Restrictions on the maximum size of the written review
   2. Easier to embed within the process of executing a transaction on the network
   3. Leverages financial motivation of users on the network to indirectly incentivise nodes storing rating/review data in the DHT
 
-Irrespective of the DHT, the data structure for OpenBazaar rating and review may appear this way:
+Irrespective of the DHT, the data structure for _OpenBazaar_ rating and review may appear this way:
 
 ```JSON
 {
-    "openbazaar_opreturn_ref": "4f4252202b31203520352035206232306336393437623131616335626462346234333338626331393664663062306633663435326420323354706c506453",
+    "_OpenBazaar__opreturn_ref": "4f4252202b31203520352035206232306336393437623131616335626462346234333338626331393664663062306633663435326420323354706c506453",
     "trade_ref":{
         "merchant_guid": "b20c6947b11ac5bdb4b4338bc196df0b0f3f452d",
         "notary_guid": "f4b5c505fd5abe9d9c631be65dfa52c9df34ae3c",
@@ -650,13 +673,13 @@ Irrespective of the DHT, the data structure for OpenBazaar rating and review may
   - However, `OP_RETURN` is such a valuable utility, we consider it unlikely that this data storage entry will be closed.
   - We already have a small centralisation risk by using Obelisk servers as block explorers.
 
-## 3.5 A Pseudonymous Trust System in OpenBazaar
+## 3.5 A Pseudonymous Trust System in _OpenBazaar_
 
 > Dionysis Zindros, National Technical University of Athens <dionyziz@gmail.com>
 
 ### Keywords
 
-`pseudonymous anonymous web-of-trust identity trust bitcoin namecoin proof-of-burn timelock decentralized anonymous marketplace openbazaar`
+`pseudonymous anonymous web-of-trust identity trust bitcoin namecoin proof-of-burn timelock decentralized anonymous marketplace _OpenBazaar_`
 
 ### Abstract
 
@@ -674,11 +697,11 @@ Webs-of-trust have also been utilized for different purposes in various experime
 
 ### Introduction
 
-The aim of our web-of-trust is to construct a means to measure trustworthiness between individuals in a commercial setting where goods can be exchanged between agents. The goal of such a measure is to limit, as much as possible, the risk of traders in an online decentralized anonymous marketplace. We are proposing a system to be used in production code as a module of OpenBazaar [OpenBazaar], a peer-to-peer decentralized anonymous marketplace that uses bitcoin [Nakamoto] to enable transactions.
+The aim of our web-of-trust is to construct a means to measure trustworthiness between individuals in a commercial setting where goods can be exchanged between agents. The goal of such a measure is to limit, as much as possible, the risk of traders in an online decentralized anonymous marketplace. We are proposing a system to be used in production code as a module of _OpenBazaar_ [_OpenBazaar_], a peer-to-peer decentralized anonymous marketplace that uses bitcoin [Nakamoto] to enable transactions.
 
-Risk management in OpenBazaar is based on two pillars: On one hand, Ricardian contracts are used to limit risk through mediators, surety bonds, and other means which can be encoded in contract format [Washington]. On the other hand, the identity system is used to establish trust towards individuals. In this paper, we introduce the latter and explore its underpinnings.
+Risk management in _OpenBazaar_ is based on two pillars: On one hand, Ricardian contracts are used to limit risk through mediators, surety bonds, and other means which can be encoded in contract format [Washington]. On the other hand, the identity system is used to establish trust towards individuals. In this paper, we introduce the latter and explore its underpinnings.
 
-Trust management in OpenBazaar is established through two different types of mutually supporting systems; projected trust and global trust. Projected trust is trust towards a particular individual which may be different for each user of the network; hence, trust is "projected" from a viewer onto a target. Global trust is trust towards a particular individual which is seen as the same from all members of the network. Projected trust is established through a pseudonymous partial knowledge web-of-trust, while global trust is established through proof-of-burn and proof-of-timelock
+Trust management in _OpenBazaar_ is established through two different types of mutually supporting systems; projected trust and global trust. Projected trust is trust towards a particular individual which may be different for each user of the network; hence, trust is "projected" from a viewer onto a target. Global trust is trust towards a particular individual which is seen as the same from all members of the network. Projected trust is established through a pseudonymous partial knowledge web-of-trust, while global trust is established through proof-of-burn and proof-of-timelock
 mechanisms.
 
 ### Threat model
@@ -699,11 +722,11 @@ Our trust metrics are heuristic; some trust deviation for malicious agents who t
 
 ### Web-of-trust
 
-The OpenBazaar web-of-trust maintains three important factors: First, it maintains strict pseudonymity through anonymizing mechanisms; second, it establishes true trust instead of identity verification; and third, it is completely decentralized.
+The _OpenBazaar_ web-of-trust maintains three important factors: First, it maintains strict pseudonymity through anonymizing mechanisms; second, it establishes true trust instead of identity verification; and third, it is completely decentralized.
 
-The OpenBazaar web-of-trust is used in a commercial setting. Trust is used to leverage commercial risk, which involves losing money. Traditional identity-verifying webs-of-trust such as GPG are in purpose agnostic about the trustworthiness of the web-of-trust participants. That type of web-of-trust verifies the identity of its members with varying certainty. However, it remains to the individual to associate trust with a particular person for a particular purpose: Whether they can be trusted with money, for example [GPG identity].
+The _OpenBazaar_ web-of-trust is used in a commercial setting. Trust is used to leverage commercial risk, which involves losing money. Traditional identity-verifying webs-of-trust such as GPG are in purpose agnostic about the trustworthiness of the web-of-trust participants. That type of web-of-trust verifies the identity of its members with varying certainty. However, it remains to the individual to associate trust with a particular person for a particular purpose: Whether they can be trusted with money, for example [GPG identity].
 
-In OpenBazaar, the participants are inherently pseudonymous. In this setting, we wish to maintain an identity for each node. This identity is strictly distinct from the operator's real-world identity. While the operator may choose to disclose the association of their real-world identity with their pseudonymous node identity, the network gives certain assurances that such pseudonymity will not be broken. Hence, pseudonymity is closely related to anonymity: Pseudonymity allows the creation and maintenance of an online "persona" identity with a certain history; anonymity ensures the real-world identity of the persona operator remains unassociated with the persona. Hence, our goal is to provide both pseudonymity and anonymity.
+In _OpenBazaar_, the participants are inherently pseudonymous. In this setting, we wish to maintain an identity for each node. This identity is strictly distinct from the operator's real-world identity. While the operator may choose to disclose the association of their real-world identity with their pseudonymous node identity, the network gives certain assurances that such pseudonymity will not be broken. Hence, pseudonymity is closely related to anonymity: Pseudonymity allows the creation and maintenance of an online "persona" identity with a certain history; anonymity ensures the real-world identity of the persona operator remains unassociated with the persona. Hence, our goal is to provide both pseudonymity and anonymity.
 
 A true web-of-trust is a directed graph where nodes are individuals and edges signify trust relationships. In contrast to identity-verifying webs-of-trust, in a true web-of-trust, edges do not signify identity verification; they signify that the edge target can be trusted in a commercial setting. For example, when trust is given to a vendor, it signifies that the vendor is trustworthy and will not scam buyers by not delivering goods. When given to a mediator, it signifies that the mediator is trustworthy will resolve conflicts between transacting parties with a neutral point of view judgment. And when given to a buyer, it signifies that the buyer is trustworthy and will pay the money she owes. Clearly, trust is not symmetric.
 
@@ -711,11 +734,11 @@ While identity verification is a concept successfully leveraged by individuals f
 
 ### Pseudonymity
 
-Each node in OpenBazaar is identified by its GUID, which uniquely corresponds to an asymmetric ECDSA key pair. This GUID is the cryptographically secure hash of the public key. The anonymity goal is to ensure this GUID remains unassociated for any real-world identity-revealing information such as IP addresses. 
+Each node in _OpenBazaar_ is identified by its GUID, which uniquely corresponds to an asymmetric ECDSA key pair. This GUID is the cryptographically secure hash of the public key. The anonymity goal is to ensure this GUID remains unassociated for any real-world identity-revealing information such as IP addresses. 
 
 Each GUID is associated with a user-friendly name. These user-friendly names can be used as mnemonic names: If someone loses their trust network by reinstalling the node without first exporting, they know that certain agents remain trustworthy. Furthermore, user-friendly names are used in the trust bootstrapping procedure in which it becomes easier to peer-review that the bootstrapped nodes are the correct ones. Finally, user-friendly names can be exchanged between users out of the software usage scope; for example, a user can directly recommend a vendor by their user-friendly name to one of their friends via e-mail.
 
-To maintain a cryptographically secure association between node GUIDs and user-friendly names, we utilize the Namecoin [Gilson] blockchain. A node can opt-in for a user-friendly name if they so choose. To create a user-friendly name for their GUID, they must register in the "id/" namecoin namespace [Namecoin ID] with their user-friendly name. For example, if one wishes to use the name "dionyziz", they must register the "id/dionyziz" name on Namecoin. The value of this registration is a JSON dictionary containing the key "OpenBazaar" which has the GUID as its value. As Namecoin ids are used for multiple purposes, this JSON may contain additional keys for other services. The namecoin blockchain ensures unforgeable cryptographic ownership of the identity. When a node broadcasts its information over the OpenBazaar network, they include their user-friendly name if it exists. If a node claims a user-friendly name, each client verifies its ownership by performing a lookup on the namecoin blockchain. If the lookup succeeds, the name is displayed on the OpenBazaar GUI and the information is relayed; otherwise the information is discarded.
+To maintain a cryptographically secure association between node GUIDs and user-friendly names, we utilize the Namecoin [Gilson] blockchain. A node can opt-in for a user-friendly name if they so choose. To create a user-friendly name for their GUID, they must register in the "id/" namecoin namespace [Namecoin ID] with their user-friendly name. For example, if one wishes to use the name "dionyziz", they must register the "id/dionyziz" name on Namecoin. The value of this registration is a JSON dictionary containing the key "_OpenBazaar_" which has the GUID as its value. As Namecoin ids are used for multiple purposes, this JSON may contain additional keys for other services. The namecoin blockchain ensures unforgeable cryptographic ownership of the identity. When a node broadcasts its information over the _OpenBazaar_ network, they include their user-friendly name if it exists. If a node claims a user-friendly name, each client verifies its ownership by performing a lookup on the namecoin blockchain. If the lookup succeeds, the name is displayed on the _OpenBazaar_ GUI and the information is relayed; otherwise the information is discarded.
 
 As namecoin names can be transferred, this allows for participants to transfer their identity to other parties if they so desire; for example, a vendor can  transfer the ownership of their store by selling it.
 
@@ -746,7 +769,7 @@ In the pseudonymous [3] web-of-trust, each node indicates their trust towards ot
 real-life associations among friends who know the real identity of the pseudonymous entity. An indication of trust does not harm anonymity in this context. This
 understanding can also come from external recommendations about vendors using friendly names. For instance, under a threat model that trusts some centralized third
 parties, it is possible to establish trust in this manner. As an example, if a vendor is popular on eBay, and a buyer trusts eBay, the vendor can disclose their
-OpenBazaar user-friendly name on their eBay profile, and the buyer may opt to trust that identity directly.
+_OpenBazaar_ user-friendly name on their eBay profile, and the buyer may opt to trust that identity directly.
 
 Trust is indicated as edges with a source, a target, and a weight. The weight is a floating-point number from -1 to 1, inclusive, with 0 indicating a neutral opinion,
 -1 indicating complete distrust, and 1 indicating complete trust. These can be displayed in a graphical user interface in a more simplistic manner; for example,
@@ -799,13 +822,13 @@ known and the platform is centralized. Facebook's social graph provides trust th
 knowledge depending on the privacy settings of the participants. However, centralization is still a problem. In centralized solutions, pseudonymous identities through
 user-friendly names can also be maintained without a blockchain. The simplicity of implementation benefit is also a strong one.
 
-Centralized solutions have the drawback of a single-point-of-failure. As one of the goals of OpenBazaar is to avoid Achilles' heels (single points of failure), centralized solutions become 
+Centralized solutions have the drawback of a single-point-of-failure. As one of the goals of _OpenBazaar_ is to avoid Achilles' heels (single points of failure), centralized solutions become 
 unacceptable. The purpose is, for instance, to eliminate the ability for government intervention in the web-of-trust through secret warrants served to the
 administrators of such a centralized system that may require the handover of private encryption and signing keys.
 
 ### Man-in-the-middle vendors
 This framework is susceptible to a man-in-the-middle attack which is unavoidable in pseudonymous settings. The attack works as follows: A malicious agent wishes
-to gain trust as a vendor without really being a trustworthy vendor. They first create an OpenBazaar vendor identity. Next, they choose one other vendor that
+to gain trust as a vendor without really being a trustworthy vendor. They first create an _OpenBazaar_ vendor identity. Next, they choose one other vendor that
 they want to impersonate. They subsequently replicate their product listing as their own. They also monitor the actual vendor's catalog for product changes, and they
 relay messages between buyers and the actual vendor when buyers message them. When a buyer purchases a product for them, the rogue vendor also forwards the purchase
 to the real vendor. Notice that this problem does not directly apply to mediators.
@@ -830,7 +853,7 @@ via a clear user interface.
 ### Feedback
 Feedback can be given by buyers to vendors, by vendors to buyers, and by buyers and vendors to mediators in text form. Feedback is a piece of text from a particular source pertaining to a particular target. Keeping the above man-in-the-middle vendor attack in mind, it may in cases not make sense to rate vendors or buyers directly if their real identity is unknown by the rater, even if they trade fairly, unless they can establish an existing trust relationship towards them in order to at least determine their legitimacy.
 
-To avoid fake feedback, feedback must only be relayed by the OpenBazaar client if it is from a node that has transacted with the target. Therefore, feedback must
+To avoid fake feedback, feedback must only be relayed by the _OpenBazaar_ client if it is from a node that has transacted with the target. Therefore, feedback must
 be digitally signed and include a reference to the transaction that took place â€“ the hash of the final Ricardian contract in question, as well as the bitcoin
 transaction where it was realized.
 
@@ -843,8 +866,8 @@ It is hard to establish trust targeting a new node on the network with no web-of
 However, it is easier to allow new users entering the network to trust individuals who have established some trust through the web-of-trust. Bootstrapping trust
 is widespread practice in the literature [Clarke].
 
-This bootstrap can be achieved by including a hard-coded set of OpenBazaar node key fingerprints that are known to be good in the distribution. At the beginning,
-these can be the OpenBazaar developers. It is crucial that the number of nodes included is wide so that no individual can influence the bootstrapped trust.
+This bootstrap can be achieved by including a hard-coded set of _OpenBazaar_ node key fingerprints that are known to be good in the distribution. At the beginning,
+these can be the _OpenBazaar_ developers. It is crucial that the number of nodes included is wide so that no individual can influence the bootstrapped trust.
 Advanced users are advised to further diminish the weights of the direct edges to the bootstrap-trusted nodes and to include higher-weighted edges to people
 they physically trust.
 
@@ -913,7 +936,7 @@ and eventually deduce the global network topology easily.
 
 The exception to this is bootstrapping nodes, which, due to necessity, must be configured
 to answer all trust queries. Some Îµ-positive trust can be used as the minimum threshold of trust below which the canonical client does not respond to queries.
-To ensure queries are authenticated, imagine a query from `A` to `C` about whether `B` is trustworthy. The query must be signed with `A`'s OpenBazaar private key to ensure topological information is not revealed to unauthorized parties asking for it. The query must be encrypted with `C`'s OpenBazaar public key to ensure that nobody else can read it, even if the inquirer is authorised. Finally, the response must be signed with `C`'s private key, to ensure that trust is not manipulated as it travels the network, and encrypted with `A`'s public key, again to ensure topological confidentiality.
+To ensure queries are authenticated, imagine a query from `A` to `C` about whether `B` is trustworthy. The query must be signed with `A`'s _OpenBazaar_ private key to ensure topological information is not revealed to unauthorized parties asking for it. The query must be encrypted with `C`'s _OpenBazaar_ public key to ensure that nobody else can read it, even if the inquirer is authorised. Finally, the response must be signed with `C`'s private key, to ensure that trust is not manipulated as it travels the network, and encrypted with `A`'s public key, again to ensure topological confidentiality.
 
 In this sense, most trust must necessarily be mutual. However, the topology of the graph still remains directed, as the trust weights can be different in
 either direction.
@@ -924,22 +947,22 @@ It is worthy to attempt an association of the web-of-trust network with other id
 previous section, such an association would compromise some of the security assumptions of the model. It is therefore mandatory that interconnection with
 other networks is an opt-in option for users who wish to forfeit some of our security goals.
 
-An interconnection with the GPG web-of-trust may be achieved by allowing OpenBazaar nodes to be associated with GPG keys. A particular OpenBazaar node can
+An interconnection with the GPG web-of-trust may be achieved by allowing _OpenBazaar_ nodes to be associated with GPG keys. A particular _OpenBazaar_ node can
 have a one-to-one association with a GPG identity through the following technical mechanism: The GPG identity can provide additive trust to the existing
-trust of the system. To indicate that a GPG key is associated with an OpenBazaar identity and that the GPG key owner wishes to transfer the GPG trust to an
-OpenBazaar node, the GPG key owner cryptographically signs a binding contract which contains the OpenBazaar GUID of the target node, and potentially a
-time frame for which the signature is valid. The GPG-signed contract can then be signed with the OpenBazaar cryptographic key to indicate that the OpenBazaar
-node operator authorizes GPG trust to be used for their node. The double signed contract can then be included in the metadata associated with the OpenBazaar node and distributed
-through the OpenBazaar distributed hash table. Each client can inter-process communicate with the GPG software instance installed on the same platform to obtain
+trust of the system. To indicate that a GPG key is associated with an _OpenBazaar_ identity and that the GPG key owner wishes to transfer the GPG trust to an
+_OpenBazaar_ node, the GPG key owner cryptographically signs a binding contract which contains the _OpenBazaar_ GUID of the target node, and potentially a
+time frame for which the signature is valid. The GPG-signed contract can then be signed with the _OpenBazaar_ cryptographic key to indicate that the _OpenBazaar_
+node operator authorizes GPG trust to be used for their node. The double signed contract can then be included in the metadata associated with the _OpenBazaar_ node and distributed
+through the _OpenBazaar_ distributed hash table. Each client can inter-process communicate with the GPG software instance installed on the same platform to obtain
 access to existing keys and signatures.
 
 Nevertheless, it is advised not to include such an implementation in the canonical client, as traditional GPG
 webs-of-trust are identity-verifying, not trust-verifying, as explored in the section above. Furthermore, the GPG web-of-trust does not offer any
 assurances on pseudonymity. While it is possible to exchange GPG signatures anonymously, the GPG web-of-trust is typically based on global topological knowledge
 of the GPG graph and is distributed through public keyservers. If a user opts-in to interconnect with the GPG web-of-trust, they are forfeiting these
-benefits of the OpenBazaar network.
+benefits of the _OpenBazaar_ network.
 
-An interconnection with the Bitcoin OTC web-of-trust is also possible. Existing trust relationships can be imported to the OpenBazaar client manually through
+An interconnection with the Bitcoin OTC web-of-trust is also possible. Existing trust relationships can be imported to the _OpenBazaar_ client manually through
 a file, or automatically downloaded from the Bitcoin OTC IRC bot dynamically upon request, as the Bitcoin OTC website is an insecure distribution channel and
 does not offer HTTPS. In the dynamic downloading case, the threat model is reduced to trusting the TLS IRC PKI, which is known to be attackable by powerful
 third parties [DigiNotar].
@@ -952,7 +975,7 @@ In this case, an Achilles' heel is introduced to the software, as the user is re
 operator, both of which identities can
 possibly be compromised by a malicious third party. The situation can be improved if the Bitcoin OTC operator begins GPG signing the trust network, or by
 requiring the Bitcoin OTC trust edges to include GPG signatures by the users involved. However, the topology of the network is again public, forfeiting
-pseudonymity requirements. Therefore, an implementation is again not advised for the canonical OpenBazaar client at this time.
+pseudonymity requirements. Therefore, an implementation is again not advised for the canonical _OpenBazaar_ client at this time.
 
 If the user is not concerned with single-points-of-failure and centralization, the web-of-trust can be temporarily bootstrapped by binding identities to
 existing social networking services which include edges between identities as "friendships" or "follows". For example, the Twitter and Facebook networks
@@ -986,12 +1009,12 @@ in question. The differentiation comes from whom the payment is addressed to.
 
 ### Proof-of-donation
 In a proof-of-donation (also called  "proof-of-charity" in the community) scheme, the pseudonym owner pays any desired amount to some organization, which is hopefully used for philanthropic or other non-profit
-purposes. The addresses of organizations that are allowed to receive donations would be hard-coded in the canonical OpenBazaar client and payments towards them
+purposes. The addresses of organizations that are allowed to receive donations would be hard-coded in the canonical _OpenBazaar_ client and payments towards them
 would have been verified by direct bitcoin blockchain inspection by each client. A proof-of-donation first seems desirable, as money is transferred to organizations
-for good. One possible scenario could include funding the OpenBazaar project itself through this scheme.
+for good. One possible scenario could include funding the _OpenBazaar_ project itself through this scheme.
 
 The technical way to achieve proof-of-donation is to simply make a regular bitcoin transaction with a donation target as its output. The transaction must also include the
-GUID of the target OpenBazaar identity that the donation is used for.
+GUID of the target _OpenBazaar_ identity that the donation is used for.
 
 Nevertheless, a proof-of-donation scheme is inadequate for our purposes, as it introduces an Achilles' heel. In particular, if a malicious agent is able to access the private
 cryptographic keys of one of the donation targets, they are able to game the system and manipulate trust arbitrarily. Compromising the private cryptographic keys
@@ -999,32 +1022,32 @@ can be achieved through various ways by powerful agents; for example, a secret w
 to the court.
 
 This attack would work as follows: The 
-malicious agent first generates a new OpenBazaar identity. Subsequently, they donate a small amount of bitcoin to the donation target organization they have
-compromised, including their OpenBazaar node as their target identity in the proof-of-donation, thereby gaining a certain amount of trust. They then use the
+malicious agent first generates a new _OpenBazaar_ identity. Subsequently, they donate a small amount of bitcoin to the donation target organization they have
+compromised, including their _OpenBazaar_ node as their target identity in the proof-of-donation, thereby gaining a certain amount of trust. They then use the
 private keys they control to give the money back to themselves, potentially through a certain number of intermediaries to avoid trackability. Finally, they
 repeat the process an arbitrary amount of times to gain any amount of trust desired, thereby gaming the system.
 
 ### Proof-to-miner
 In a proof-to-miner scheme, the payment to create trust for an identity is paid to the miner that first confirms the bitcoin transaction which is the proof.
 This scheme initially seems desirable, as there is no single entity which can be compromised, and it incentivizes the network to mine more, thereby making bitcoin
-more secure and, in turn, OpenBazaar more secure.
+more secure and, in turn, _OpenBazaar_ more secure.
 
 Technically, proof-to-miner can be achieved by including an OP_TRUE in the output script of the transaction. While anyone is, in principle, able to spend the
 output of the given transaction, a miner is incentivized to only include their own spending in their confirmation. Alternatively, a 0-output bitcoin transaction
-can be made, so that all the inputs are given to the next miner as fees. Again it is important to include the GUID of the OpenBazaar identity in the transaction.
+can be made, so that all the inputs are given to the next miner as fees. Again it is important to include the GUID of the _OpenBazaar_ identity in the transaction.
 
-Unfortunately, it is again possible to game this system. This attack would work as follows: The malicious agent first generates a new OpenBazaar identity. Subsequently,
+Unfortunately, it is again possible to game this system. This attack would work as follows: The malicious agent first generates a new _OpenBazaar_ identity. Subsequently,
 they make a proof-to-miner bitcoin transaction with any amount they desire, but they keep the transaction secret. They then perform regular bitcoin mining as usual,
 but include their secret proof-to-miner transaction in their block confirmation. Including an additional transaction does not increase the cost of mining; therefore
 this approach can be employed by existing rational miners. If they succeed in generating a block, they publish the secret transaction and they gain identity trust
-in the OpenBazaar network, and can use the money again in the same scheme to increase their trust arbitrarily. If they do not succeed in generating a block, they 
+in the _OpenBazaar_ network, and can use the money again in the same scheme to increase their trust arbitrarily. If they do not succeed in generating a block, they 
 keep the transaction secret and double-spend the money in a future transaction in the same scheme, until they are able to generate a block.
 
 ### Proof-of-burn
 Proof-of-burn schemata have been in use by the cryptocurrency community in various settings [CounterParty]. In proof-of-burn, the payment to create trust for an
 identity is paid in a way that remains unspendable. Because it is unspendable, the system cannot be easily gamed as in the previous approaches.
 
-Technically, proof-of-burn makes a regular bitcoin transaction including an OP_FALSE in the output script of the transaction. Again, the GUID of the OpenBazaar
+Technically, proof-of-burn makes a regular bitcoin transaction including an OP_FALSE in the output script of the transaction. Again, the GUID of the _OpenBazaar_
 identity is included in the transaction to enable blockchain validation.
 
 Proof-of-burn makes Sybil attacks infeasible, as it requires the attacker to create multiple high trust entities in the network, which is costly. In essence,
@@ -1033,7 +1056,7 @@ this is equivalent to bitcoin's proof-of-work scheme and leverages the existing 
 Global trust based on proof-of-burn is based on how much money was burned to establish a particular identity. We use `g(x)` to denote the global trust
 derived from the fact that an amount `x` has been spent to establish the trust of the identity. We notice that `x` is the sum of all the amounts that
 has been provably burned for this particular identity. In addition, we notice that when a particular transaction output is used to establish trust
-towards some identity, this output is necessarily only associated with one identity. Verification of this proof can be done by the canonical OpenBazaar
+towards some identity, this output is necessarily only associated with one identity. Verification of this proof can be done by the canonical _OpenBazaar_
 client through direct bitcoin blockchain inspection. `x(B)` is a function of the person whose proof-of-burn is to be determined, `B`. For simplicity,
 we will for now denote it as `x`.
 
@@ -1124,7 +1147,7 @@ In parallel with our proposals, we illustrated security concerns on mechanisms t
 appropriate for such an implementation, such as proof-of-donation and proof-to-miner, and we developed an attack on the web-of-trust through
 graph separator control.
 
-Overall, this pseudonymous trust system can be used in a commercial setting such as OpenBazaar. It is strengthened when supported by Ricardian contracts
+Overall, this pseudonymous trust system can be used in a commercial setting such as _OpenBazaar_. It is strengthened when supported by Ricardian contracts
 to create binding agreements between parties through the security of the Bitcoin blockchain and should not be used alone.
 
 ### Notes
@@ -1134,7 +1157,7 @@ to create binding agreements between parties through the security of the Bitcoin
 
 2. GPG distinguishes between trusting the identity binding between a real-world individual and a key and the trust directly given to an individual
    as far as they are concerned about *signing* other keys. In a similar setting as blurring the trust between different roles, we consider these to be the same.
-   In the OpenBazaar web-of-trust, trust is an intuitive concept and there need to be no formal rules followed when trust is given to others. The every-day
+   In the _OpenBazaar_ web-of-trust, trust is an intuitive concept and there need to be no formal rules followed when trust is given to others. The every-day
    statement "I trust this person" corresponds to actually giving trust to an individual. This is in contrast to the GPG web-of-trust in which signing keys
    requires a certain procedure of identity verification with which individuals may not be familiar with, and hence this differentiation is in order.
 
@@ -1149,8 +1172,8 @@ to create binding agreements between parties through the security of the Bitcoin
 5. This algorithm is a draft. Please leave your comment on potential attacks and vulnerabilities it may have. It seems too simplistic to be able to work in
    the real world and may need considerable tweaks.
 
-6. The author strongly advises against such interconnections. The threat model of the OpenBazaar network is completely forfeited if such trust relationships
-   are used. Centralized, non-anonymous services for trade such as eBay are widespread and can be used in OpenBazaar's stead if these assurances are of no
+6. The author strongly advises against such interconnections. The threat model of the _OpenBazaar_ network is completely forfeited if such trust relationships
+   are used. Centralized, non-anonymous services for trade such as eBay are widespread and can be used in _OpenBazaar_'s stead if these assurances are of no
    concern to the user.
 
 7. This simple transitivity scheme is flawed and it must be reworked. Currently, trust is impossible to calculate if cycles exist in the network graph. As
@@ -1162,9 +1185,9 @@ to create binding agreements between parties through the security of the Bitcoin
 ### References
 * P.R. Zimmermann. The Ofï¬cial PGP Userâ€™s Guide. MIT Press, 1995
 * Patrick Feisthammel, 7 Oct 2004, http://www.rubin.ch/pgp/weboftrust.en.html
-* OpenBazaar: http://openbazaar.org/
+* _OpenBazaar_: http://_OpenBazaar_.org/
 * Satoshi Nakamoto, Bitcoin: A Peer-to-Peer Electronic Cash System, 2008
-* Sanchez Washington, 23 June 2014, https://github.com/OpenBazaar/OpenBazaar/wiki/Contracts-and-Listings
+* Sanchez Washington, 23 June 2014, https://github.com/_OpenBazaar_/_OpenBazaar_/wiki/Contracts-and-Listings
 * I. Clarke, O. Sandberg, B. Wiley, and T.W. Hong. Freenet: A distributed anonymous information storage and retrieval system. In Proc. Int. Work- shop on Design Issues in Anonymity and Unobservability, volume 2009 of LNCS, pages 46â€“66, 2001.
 * Freenet WoT: https://wiki.freenetproject.org/Web_of_Trust
 * OTC: http://wiki.bitcoin-otc.com/wiki/OTC_Rating_System
@@ -1184,18 +1207,18 @@ to create binding agreements between parties through the security of the Bitcoin
 
 ## 3.6 Dispute Resolution
 
-Multisignature escrow addresses are the key to managing risk for trades between peers on *OpenBazaar*. These addresses mathematically ensure that a single agent is incapable of stealing funds from an address using their private key alone. Furthermore, multisignature addresses can be designed to accommodate several parties within a voting pool as [previously discussed](https://github.com/OpenBazaar/OpenBazaar/blob/master/docs/06%20Voting%20Pools%20in%20OpenBazaar.md). 
+Multisignature escrow addresses are the key to managing risk for trades between peers on *_OpenBazaar_*. These addresses mathematically ensure that a single agent is incapable of stealing funds from an address using their private key alone. Furthermore, multisignature addresses can be designed to accommodate several parties within a voting pool as [previously discussed](https://github.com/_OpenBazaar_/_OpenBazaar_/blob/master/docs/06%20Voting%20Pools%20in%20_OpenBazaar_.md). 
 
-In a typical 2-of-3 multisignature transaction in *OpenBazaar*, the first two signers are the buyer and seller. The third signature is a 'trusted' third party who has the power to sign a transaction in combination with the buyer or seller in the event of an accident, key theft, or dispute. The third party signer, a notary, in *OpenBazaar* also acts as the third signer of Ricardian contracts for the sale of goods and services, to leverage the many strengths of [triple-entry accounting](http://iang.org/papers/triple_entry.html) particularly for settling **disputes**.
+In a typical 2-of-3 multisignature transaction in *_OpenBazaar_*, the first two signers are the buyer and seller. The third signature is a 'trusted' third party who has the power to sign a transaction in combination with the buyer or seller in the event of an accident, key theft, or dispute. The third party signer, a notary, in *_OpenBazaar_* also acts as the third signer of Ricardian contracts for the sale of goods and services, to leverage the many strengths of [triple-entry accounting](http://iang.org/papers/triple_entry.html) particularly for settling **disputes**.
 
-Dispute resolution is a fundamental component to success of *OpenBazaar*. As the goal of *OpenBazaar* is to create a decentralised and censorship-resistant marketplace, State-mediated dispute resolution is out of the question. Thus, our model should follow non-State services, also known as alternative dispute resolution (ADR). 
+Dispute resolution is a fundamental component to success of *_OpenBazaar_*. As the goal of *_OpenBazaar_* is to create a decentralised and censorship-resistant marketplace, State-mediated dispute resolution is out of the question. Thus, our model should follow non-State services, also known as alternative dispute resolution (ADR). 
 
-Many forms of ADR exist in the *legacy* marketplace. ADR aims to avoid final adjudication by the State in order to reduce overall costs, save time, and potentially prevent an adversarial outcome between the contending parties after the dispute has been resolved. Rather, *OpenBazaar* aims to create a marketplace for ADR, alongside goods and services, to settle disputes between peers. 
+Many forms of ADR exist in the *legacy* marketplace. ADR aims to avoid final adjudication by the State in order to reduce overall costs, save time, and potentially prevent an adversarial outcome between the contending parties after the dispute has been resolved. Rather, *_OpenBazaar_* aims to create a marketplace for ADR, alongside goods and services, to settle disputes between peers. 
 
 ### 1. Dispute Resolution
 
 #### Notaries
-Thus far the proposals for various market implementations within *OpenBazaar* (and other decentralised marketplace proposals) have assumed that a third party in a transaction (i.e. the third signer in a 2-of-3 multisignature escrow address) performs two roles:
+Thus far the proposals for various market implementations within *_OpenBazaar_* (and other decentralised marketplace proposals) have assumed that a third party in a transaction (i.e. the third signer in a 2-of-3 multisignature escrow address) performs two roles:
 
 1. **Notarising** contracts and transactions 
 2. **Arbitrating** disputes between two or more in parties
@@ -1209,7 +1232,7 @@ The **notary** aspect of their service includes digitally signing contracts and 
 A possible solution is to divide these services, to be provided by separate agents: 
 
 1. A notary, to focus exclusively on signing Ricardian contracts and creating/signing multisignature transactions
-2. An arbiter, dispute resolution as an independent and exclusive service on *OpenBazaar*
+2. An arbiter, dispute resolution as an independent and exclusive service on *_OpenBazaar_*
 
 Pamela Morgan expands on this concept:
 
@@ -1231,9 +1254,9 @@ A notary's responsibilities include:
   1. A late-signing buyer (*lazy transactions*)
   2. A dispute between the buyer and seller, releasing funds according to the arbiter's judgement
 3. Selecting a tie-breaking arbiter for an arbiter pool
-4. 'Hand-holding' new users in using *OpenBazaar* for the first time
+4. 'Hand-holding' new users in using *_OpenBazaar_* for the first time
 
-Given the role that notaries will play in exchanges in *OpenBazaar*, _their services would need to be available essentially 24/7_. Of the responsibilities listed above, the first can be entirely _automated_ and capped according to the notary's preference. The second responsibility requires the attention of the notary in order to sign the transactions. After successfully receiving the good, the buyer may be delayed in signing a transaction to release funds from the multisignature escrow address to the seller. In this case, the notary is involved to release these funds. In the event of a dispute, the notary prepares a transaction according to the arbiter's judgement for signing in combination with the 'winning' party. Of course, the notary doesn't need to fulfill this role if both the buyer and seller perform this function themselves. If a dispute arises where an arbitration pool is requested from the buyer and seller, the notary can be called upon to choose a tie-breaking arbiter according to their preference prior to the *hearing* of the dispute. Finally, the notary can offer to supervise new users through a transaction, explaining each step of the process and troubleshooting potential issues.
+Given the role that notaries will play in exchanges in *_OpenBazaar_*, _their services would need to be available essentially 24/7_. Of the responsibilities listed above, the first can be entirely _automated_ and capped according to the notary's preference. The second responsibility requires the attention of the notary in order to sign the transactions. After successfully receiving the good, the buyer may be delayed in signing a transaction to release funds from the multisignature escrow address to the seller. In this case, the notary is involved to release these funds. In the event of a dispute, the notary prepares a transaction according to the arbiter's judgement for signing in combination with the 'winning' party. Of course, the notary doesn't need to fulfill this role if both the buyer and seller perform this function themselves. If a dispute arises where an arbitration pool is requested from the buyer and seller, the notary can be called upon to choose a tie-breaking arbiter according to their preference prior to the *hearing* of the dispute. Finally, the notary can offer to supervise new users through a transaction, explaining each step of the process and troubleshooting potential issues.
 
 #### Notary Fees
 While the market will ultimately determine the fee structure, we assume that automated services such as contract signing (role #1 above) would be offered freely, subsidised by other services requiring the notary's directly involvement. As for the appropriate value of the fee, we expect it to be equal to or lesser than a typical bitcoin transaction fee. This fee can either be paid as a refundable deposit from both parties, or deducted from the price of the good being sold.
@@ -1241,14 +1264,14 @@ While the market will ultimately determine the fee structure, we assume that aut
 #### Advantages and Challenges
 There are several advantages to using a dedicated notary service for 3rd party contract and transaction signing. Firstly, and perhaps most importantly, there is an effective separation between the power to release funds from a multisignature escrow address, and dispute resolution between two parties. As a result, notary and arbitration services can be independently assessed and rated for their efficiency. 
 
-Secondly, there is a market created for notary services for the timely fulfilment of their obligations in a trade, especially triple-signing Ricardian contracts. In the event of a dispute, the final cost in fees and time is slightly higher than in a role where notary and arbitration services overlap within a single agent. However, the increase in dispute costs may incentivise greater care in arranging exchanges within *OpenBazaar* to specifically avoid these fees.
+Secondly, there is a market created for notary services for the timely fulfilment of their obligations in a trade, especially triple-signing Ricardian contracts. In the event of a dispute, the final cost in fees and time is slightly higher than in a role where notary and arbitration services overlap within a single agent. However, the increase in dispute costs may incentivise greater care in arranging exchanges within *_OpenBazaar_* to specifically avoid these fees.
 
-#### Practical Implementation into *OpenBazaar*
-How will the separation of notary and arbitration services into separate agents affect the end-user experience and overall mechanics of a transactions? Firstly, similar to the original model, the end-user begins their *OpenBazaar* experience by selecting preferred notary service providers for all future transactions. In selecting a notary, a user should prefer services that are automated with 24 hour response time when 'human interaction' is required.
+#### Practical Implementation into *_OpenBazaar_*
+How will the separation of notary and arbitration services into separate agents affect the end-user experience and overall mechanics of a transactions? Firstly, similar to the original model, the end-user begins their *_OpenBazaar_* experience by selecting preferred notary service providers for all future transactions. In selecting a notary, a user should prefer services that are automated with 24 hour response time when 'human interaction' is required.
 
 Ideally, the client will select a notary service provider that is present on both the buyer and seller's 'preferred list', or an overlapping notary up to X degrees of freedom from the buyer and seller's Web of trust. For example, the buyer has a friend who shares a preference for a notary with the seller's friend of a friend (2 degrees of freedom). Failing this, the client can either randomly select a notary agent based on their reputation metrics. 
 
-Finally, while it is the recommendation of this author for users to separate notaries from arbiters, the client will not impose this model. As the notary/arbitration market is a specialised service for *OpenBazaar*, users will be able to browse through various users offering notary and/or arbitration services. Ultimately the market will pick an approach that seems to be the most efficient.
+Finally, while it is the recommendation of this author for users to separate notaries from arbiters, the client will not impose this model. As the notary/arbitration market is a specialised service for *_OpenBazaar_*, users will be able to browse through various users offering notary and/or arbitration services. Ultimately the market will pick an approach that seems to be the most efficient.
 
 #### Notary Inclusion into Contracts
 We predict that there will be two ways notaries will be included into the contract formation process. The first way is **offline**, which requires the contract to be digitally signed and passed along to the next party after inclusion of new information (demonstrated below):
@@ -1262,14 +1285,14 @@ This process is somewhat tedious, but necessary to establish the proper authenti
 It is important to note that the client isn't required to create these contracts, which can be made externally and imported into the client to streamline the digital signing and notary/arbitration process.
 
 ### 2. Negotiation
-For dispute resolution between peers on *OpenBazaar*, the two major forms of ADR to be implemented are:
+For dispute resolution between peers on *_OpenBazaar_*, the two major forms of ADR to be implemented are:
 
 1. **Negotiation:** where both parties directly arrive at a resolution of a dispute.
 2. **Arbitration:** where a third party is invited to resolve a dispute
 
 *Negotiation* is a preferable approach to dispute resolution as it does not involve intervention by a third party, not even the notary of the transaction. Negotiation between the buyer and seller seeks to resolve the conflict by discourse between the parties. The transfer of bitcoins from the multisignature address can be accomplished by both parties after a successful negotiation.
 
-Negotiation on *OpenBazaar* can take place over any communication platform inside or outside of the client software. The client currently supports encrypted communication from node to node, and also integrates BitMessage. For real-time negotiation, platforms such as CryptoCat may be an easy to use messaging platform that supports off-the-record encryption. In addition, the DarkWallet client also supports private communication channels. 
+Negotiation on *_OpenBazaar_* can take place over any communication platform inside or outside of the client software. The client currently supports encrypted communication from node to node, and also integrates BitMessage. For real-time negotiation, platforms such as CryptoCat may be an easy to use messaging platform that supports off-the-record encryption. In addition, the DarkWallet client also supports private communication channels. 
 
 The details and outcome of a negotiation do not need to be written down or formalised in any way. Every effort should be made by both parties to resolve disputes between themselves to preserve favorable reputations and avoid arbitration fees. However, not every dispute can be resolved peer to peer negotiation; an outside party is required to arbitrate.
 
@@ -1360,9 +1383,9 @@ Formatted correctly, the arbitration contract may look something like this:
 The digital signatures of the buyer, seller, and notary are appended to the contract and sent to the arbiter for their approval. If the arbiter agrees to hear the case, he/she appends their details and digital signature to the contract, sending back to the interested parties. The case can now be considered open, with the format and presentation of the evidence to be arranged between them.
 
 #### Arbitration Market and Precedents
-The **arbitration market** is a dedicated marketplace featured in the client listing agents offering notary and/or arbitration services in *OpenBazaar*. These agents will list the duties they perform, the estimated response-time for their services, and fees. In addition to these, arbitration service providers can also display a list **precedents** that they themselves have established or other arbiters have published in order to give an expectation of service *process* and *quality*.
+The **arbitration market** is a dedicated marketplace featured in the client listing agents offering notary and/or arbitration services in *_OpenBazaar_*. These agents will list the duties they perform, the estimated response-time for their services, and fees. In addition to these, arbitration service providers can also display a list **precedents** that they themselves have established or other arbiters have published in order to give an expectation of service *process* and *quality*.
 
-**Precedents**, the legal standards formed due the application of consistent rulings on similar cases, will become a key performance predictor and indicator of an arbiter's capacity to fairly administer justice on *OpenBazaar*. It is difficult to predict how precents will be formatted, but some considerations are most likely:
+**Precedents**, the legal standards formed due the application of consistent rulings on similar cases, will become a key performance predictor and indicator of an arbiter's capacity to fairly administer justice on *_OpenBazaar_*. It is difficult to predict how precents will be formatted, but some considerations are most likely:
 
 1. Consent
   - Both parties must consent to their case being published as a precedent for the arbiter
@@ -1379,7 +1402,7 @@ The **arbitration market** is a dedicated marketplace featured in the client lis
   - What were the fees for resolving this type of dispute? 
   - If the dispute took extra time than expected, what was charged?
 
-Arbiters may offer their services *pro-bono* in order to build up a case history of precedents to market themselves for future employment. Alternatively, new arbiters may cite *precedents* from other well-known and highly rated arbiters to indicate a pattern arbitration for similar cases. Ultimately, through the use of precedents and an arbitration market, a polycentric merchant law is expected to arise in *OpenBazaar*.
+Arbiters may offer their services *pro-bono* in order to build up a case history of precedents to market themselves for future employment. Alternatively, new arbiters may cite *precedents* from other well-known and highly rated arbiters to indicate a pattern arbitration for similar cases. Ultimately, through the use of precedents and an arbitration market, a polycentric merchant law is expected to arise in *_OpenBazaar_*.
 
 #### Appeals
 A later innovation of market arbitration can be the formation of an appeals process to resolving disputes. Prior to the initial round of arbitration, both parties can agree to establish a 3-tier appeal process. Each arbitration tier may consist of arbiters of increasing quality and/or quantity, and therefore price. In the outcome of a first-tier arbitration decision that leaves the losing party dissatisfied, the losing party may appeal to the second-tier arbiter. The contract and dispute records are all forwarded to the second-tier arbiter who first determines whether the case should be heard. Consideration of the case may attract a fee, which could be paid by the appealer. If the case is heard, a second round of arbitration begins; if not, the standing judgement of the first arbiter remains and the notary prepare and signs a transaction accordingly.

@@ -2,9 +2,7 @@
 
 ## 2.1 Installation
 
-Future versions of OpenBazaar will be developed using [Electron](https://github.com/atom/electron), which will enable the platform to be easily installed on all platforms.
-
-Below are instructions for the current version (beta 5.0) of OpenBazaar.
+Future versions of _OpenBazaar_ will be developed using [Electron](https://github.com/atom/electron), which will enable the platform to be easily installed on all platforms. Below are instructions for the current version (beta 5.0) of _OpenBazaar_.
 
 ### Mac OSX and Ubuntu (using configure.sh script)
 
@@ -45,7 +43,7 @@ First at all, we need to create a virtualenv in order to avoid conflictive depen
 	+ `source /usr/local/bin/virtualenvwrapper.sh`
 7. `source ~/.zshrc` (the file where you put the lines in the previous step).
 8. `mkvirtualenv open_bazaar` or whatever name that you like.
-	+ With the virtualenv already active, then install OpenBazaar:
+	+ With the virtualenv already active, then install _OpenBazaar_:
 9. `$ apt-get update`
 10. `$ apt-get install git python-dev python-pip g++ libjpeg-dev zlib1g-dev sqlite3 libssl-dev`
 11. `$ cd /opt`
@@ -60,7 +58,7 @@ First at all, we need to create a virtualenv in order to avoid conflictive depen
 
 ### Vagrant
 
-These instructions download a VirtualBox image (Ubuntu Trusty) and use Vagrant (>=1.3.0) to configure an OpenBazaar node inside the virtual environment. When the node is running, you can navigate to http://localhost:8888 on your local machine to access the client. This setup should take less than 10GB and about an hour. These instructions should include all necessary code for starting OpenBazaar.
+These instructions download a VirtualBox image (Ubuntu Trusty) and use Vagrant (>=1.3.0) to configure an _OpenBazaar_ node inside the virtual environment. When the node is running, you can navigate to http://localhost:8888 on your local machine to access the client. This setup should take less than 10GB and about an hour. These instructions should include all necessary code for starting _OpenBazaar_.
 
 1. This example is built on an Ubuntu Trusty host. Doesn't work from inside a virtual machine.
 	+ `sudo apt-get update`
@@ -72,7 +70,7 @@ These instructions download a VirtualBox image (Ubuntu Trusty) and use Vagrant (
 	+ `vagrant up`
 4. Log into the vagrant instance:
 	+ `vagrant ssh`
-5. Start the OpenBazaar node:
+5. Start the _OpenBazaar_ node:
 	+ *Before running for the first time: `cd /vagrant && ./configure.sh`*
 	+ **Production:**`cd /vagrant && ./openbazaar start && tail -f logs/production.log`
 	+ **Development:**`cd /vagrant && ./openbazaar -d start && tail -f logs/development.log`
@@ -109,7 +107,7 @@ You can either install natively or use vagrant. If you decide to use vagrant, ju
 7. `source ~/.zshrc`
 	+ or where you put the lines above
 
-**Install OpenBazaar**
+**Install _OpenBazaar_**
 
 1. `git clone https://github.com/OpenBazaar/OpenBazaar.git`
 2. `cd OpenBazaar`
@@ -137,7 +135,7 @@ CPPFLAGS=-Qunused-arguments CFLAGS=-Qunused-arguments pip install -r requirement
 + If you are getting a complaint about not having PIL and you're on Ubuntu try:
 	+ `sudo apt-get install python-imaging`
 + If you are having problems sort of like [this](https://gist.githubusercontent.com/joshlemer/b1d2a8173889c368a8b1/raw/b64ac4b3db7c62f00469d57412a6ee6c1bf3f0cb/OpenBazaarError) when you try to run `vagrant up`, try these steps:
-	+ Open the Virtualbox GUI client, select the OpenBazaar machine and select 'Start'.
+	+ Open the Virtualbox GUI client, select the _OpenBazaar_ machine and select 'Start'.
 	+ If this doesn't start the machine, but instead returns an error like [this one](https://gist.githubusercontent.com/joshlemer/b1d2a8173889c368a8b1/raw/bb0da8ca637e07a17d6905cfcdc9ecbb3781cf16/VirtualBoxError), then you'll want to try following the advice in [this thread](https://github.com/mitchellh/vagrant/issues/2157). 
 	+ If you're still having the issue, you'll want to try entering your system BIOS to enable Virtualized Hardware.
 
@@ -153,7 +151,7 @@ CPPFLAGS=-Qunused-arguments CFLAGS=-Qunused-arguments pip install -r requirement
 
 ### Generating a PGP Keypair 
 #### Ubuntu/Linux: Won't get past 'Generating PGP keypair' or takes way too long to generate key.
-+ When you first run OpenBazaar it needs to create a 2048 bit key, this could take a few seconds, but on some Ubuntu systems it takes so long (>30 min) that you'd give up and try again.
++ When you first run _OpenBazaar_ it needs to create a 2048 bit key, this could take a few seconds, but on some Ubuntu systems it takes so long (>30 min) that you'd give up and try again.
 + When you do a ps aux, you see this process stuck doing nothing:
 	+ `gpg --status-fd 2 --no-tty --gen-key --batch`
 + The reason is that to generate the PGP key, the system needs entropy. When you read the `entropy_avail` file (`cat /proc/sys/kernel/random/entropy_avail`) you will probably see a very low number. A solution to having more entropy is to install the ***rng-tools***.
@@ -169,11 +167,11 @@ CPPFLAGS=-Qunused-arguments CFLAGS=-Qunused-arguments pip install -r requirement
 + Now try once again to start it.
 	+ `sudo service rng-tools start`
 
-## 2.2 User guide
+## 2.2 User Guide
 
 ### 2.2.1 Overview of the Client
 
-There are six tabs in the OpenBazaar client:
+There are six tabs in the _OpenBazaar_ client:
 
 1. Home
 2. Messages
@@ -217,7 +215,7 @@ To make a pledge, simply send a small amount of Bitcoin to the address listed as
 
 ##### Shipping Information
 
-This is where a buyer will input their shipping information. If you intend on using OpenBazaar as a buyer as well as a merchant, you should fill this section out as well.
+This is where a buyer will input their shipping information. If you intend on using _OpenBazaar_ as a buyer as well as a merchant, you should fill this section out as well.
 
 #### Keys
 
@@ -227,7 +225,7 @@ This is the uncompressed Bitcoin public key created for signing.
 
 ##### BIP32 Seed
 
-The OpenBazaar client uses BIP32 to create HD keys for signing. This increases privacy by ensuring that the same key isn’t used for signing multisignature transactions. This seed should be kept private.
+The _OpenBazaar_ client uses BIP32 to create HD keys for signing. This increases privacy by ensuring that the same key isn’t used for signing multisignature transactions. This seed should be kept private.
 
 ##### PGP Public Key
 
@@ -241,7 +239,7 @@ In order to encrypt communications over the network, each store creates a PGP ke
 
 #### Notary
 
-Notaries are a vital part of OpenBazaar. They are the third key holder in the 2-of-3 multisig, meaning that if there is a dispute between buyer and merchant, only the notary has the power to work with one of the parties to release the funds. As such, it’s important that buyer and merchant trust the notary not to collude with the other party. In beta we recommend smaller transactions until reputable notaries emerge in the market. Since in the 5.0 beta buyers choose notaries, the burden is on the merchant to either accept the buyer’s choice of notary or contact the buyer and notary to tell them you don’t want to engage in trade with the other parties.
+Notaries are a vital part of _OpenBazaar_. They are the third key holder in the 2-of-3 multisig, meaning that if there is a dispute between buyer and merchant, only the notary has the power to work with one of the parties to release the funds. As such, it’s important that buyer and merchant trust the notary not to collude with the other party. In beta we recommend smaller transactions until reputable notaries emerge in the market. Since in the 5.0 beta buyers choose notaries, the burden is on the merchant to either accept the buyer’s choice of notary or contact the buyer and notary to tell them you don’t want to engage in trade with the other parties.
 
 ##### Trusted Notaries
 
@@ -370,27 +368,27 @@ In the 5.0 beta client, the notary has two options. “Refund the Buyer” relea
 
 ![Messages](https://blog.openbazaar.org/wp-content/uploads/2015/04/OBmessage.png)
 
-The messages tab is a place to communicate with other OpenBazaar users who are online. You can send simple messages (text only at this point) by clicking the “Send a Message” button and selecting another user from the dropdown list. Messages you’ve received can be read by clicking on them, and replied to by hitting the blue “Reply” button on the right.
+The messages tab is a place to communicate with other _OpenBazaar_ users who are online. You can send simple messages (text only at this point) by clicking the “Send a Message” button and selecting another user from the dropdown list. Messages you’ve received can be read by clicking on them, and replied to by hitting the blue “Reply” button on the right.
 
 #### Terminal commands
 
-For Linux and OSX users, you need to use the terminal to configure, start, and stop OpenBazaar. Here are some common commands to use.
+For Linux and OSX users, you need to use the terminal to configure, start, and stop _OpenBazaar_. Here are some common commands to use.
 
-1. `./configure.sh` This installs OpenBazaar once the code has been downloaded. After major releases, you may need to run configure again.
+1. `./configure.sh` This installs _OpenBazaar_ once the code has been downloaded. After major releases, you may need to run configure again.
 2. `./openbazaar help` This gives you a list of arguments you can use when launching OpenBazaar.
-3. `./openbazaar start` This launches OpenBazaar.
-4. `./openbazaar stop` This shuts down OpenBazaar.
+3. `./openbazaar start` This launches _OpenBazaar_.
+4. `./openbazaar stop` This shuts down _OpenBazaar_.
 5. `git pull` If git is correctly installed, this will update the software if there are new changes.
 
 #### Tips and Tricks
 
 1. Try refreshing the page occasionally if things aren’t working correctly.
 2. Wait a minute or two when first connecting to find peers. It shouldn’t take any longer than this.
-3. If you have connectivity problems, try using `killall python -9` in terminal, then launch OpenBazaar again.
-4. If you receive a “Address already in use” error when starting OpenBazaar, this means the program was already running. Stop it first, then launch again.
+3. If you have connectivity problems, try using `killall python -9` in terminal, then launch _OpenBazaar_ again.
+4. If you receive a “Address already in use” error when starting _OpenBazaar_, this means the program was already running. Stop it first, then launch again.
 5. If your client crashes or has an obvious error, try looking for /logs/production.log and searching for ‘Traceback’ to see what the error was. If you don’t see anyone else posting about that error on the [Github issues](https://github.com/OpenBazaar/OpenBazaar/issues) and our [Help Desk](https://openbazaar.zendesk.com/hc/en-ushttps://openbazaar.zendesk.com/hc/en-us) then feel free to post along with the error and some context.
 
-### 2.2.2 Merchant's Guide to OpenBazaar
+### 2.2.2 Merchant's Guide to _OpenBazaar_
 
 #### Step One: Set up Store
 ![Settings Tab](http://i.imgur.com/28L8coh.gif)
@@ -442,7 +440,7 @@ Enter a Bitmessage address if you want to communicate with other parties via Bit
 5. Once you’ve shipped the item, input your Bitcoin address into the Shipping & Payment section of the order view, where it asks “Where would you like payment sent to?”
 6. Once the buyer receives the item, they should release payment. If they don’t in a reasonable time, contact the buyer and request they release funds. If they are non-responsive, contact the notary involved in the transaction and request they release funds.
 
-### 2.2.2 Buyer's Guide to OpenBazaar
+### 2.2.2 Buyer's Guide to _OpenBazaar_
 
 #### Step One: Personalize your Client
 
@@ -475,7 +473,7 @@ Enter an email address if you want to communicate with other parties via email.
 
 ![Trusting a Notary](http://i.imgur.com/xp8kgug.gif)
 
-Notaries are a vital part of OpenBazaar. They are the third key holder in the 2 of 3 multisig, meaning that if there is a dispute between buyer and merchant, only the notary has the power to work with one of the parties to release the funds. As such, it’s important that buyer and merchant trust the notary not to collude with the other party. In beta we recommend smaller transactions until reputable notaries emerge in the market.
+Notaries are a vital part of _OpenBazaar_. They are the third key holder in the 2 of 3 multisig, meaning that if there is a dispute between buyer and merchant, only the notary has the power to work with one of the parties to release the funds. As such, it’s important that buyer and merchant trust the notary not to collude with the other party. In beta we recommend smaller transactions until reputable notaries emerge in the market.
 
 When viewing stores on the Home tab, look for users that offer services. This is only visible if the user offers notary services. If they do, it will display their percentage fee, a description of their services, and allow users to select them as notaries by clicking “Make Trusted Notary.” You can also manually add a notary in Settings if you know their GUID (string of letters and numbers under the store name).
 
@@ -507,7 +505,7 @@ If the buyer marked the order as paid, but the merchant didn’t receive this me
 
 Once the item has arrived or service is provided, the buyer can then release the funds from multisig by opening the order and selecting “Release Payment to Merchant.” Again, if the merchant didn’t receive this message due to being offline, the buyer can try releasing again when they are online.
 
-### 2.2.3 Notary's Guide to OpenBazaar
+### 2.2.3 Notary's Guide to _OpenBazaar_
 
 #### Step One: Personalize your Client
 
