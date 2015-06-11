@@ -21,7 +21,7 @@ The Kademlia-style P2P network is older and distinct from the Bitcoin blockchain
 
 The _public key_ is then digitally signed with the the _private key_ (self-signature) and `sha256` hashed. The resulting hex is then further hashed by `RIPEMD160` to generate the **GUID**. This GUID is impossible to forge or spoof without compromising the private key, and is the basis of a node's pseudonymous identity on the network.
 
-> **GUID** = RIPEMD160(SHA256(self-signed _pubkey_))
+`GUID = RIPEMD160(SHA256(self_signed pubkey))`
 
 The GUID is mapped to your dynamic IP address and port on a _distributed hash table_ (DHT). This is not a distributed ledger like the blockchain, but a local 'map' of GUIDs (peers) and their IP addresses in your 'bucket' ('bucket' defined as similar GUIDs within a defined range). Each peer's DHT allows anyone on the network to find the location of a specific peer in only a few hops (i.e. think 6 degrees of separation). On this basis, peers can connect to each other to exchange data.
 
