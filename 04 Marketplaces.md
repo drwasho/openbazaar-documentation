@@ -6,13 +6,15 @@ These include:
 
 1. E-Commerce
   - Physical goods
-    - Fixed price
-    - Auctions
+    + Fixed price
+    + Auctions
   - Digital goods
 2. Services
-    - Invitation to tender
-    - Auction 
-    - Fixed rate
+  - Service Contracts
+  - Invitation to Tender (ITT)
+    + TradeNet
+  - Service Listing
+  - Good Performance Bonds
 3. Lending
     - P2P lending
     - Bonds
@@ -21,9 +23,9 @@ These include:
     - Futures (bounded futures) 
     - Options
     - Swaps
-5. Crowd funding
+5. Decentralised Currency exchange
 6. Insurance
-7. Currency exchange
+7. Crowd funding
 8. Prediction markets 
 
 
@@ -45,7 +47,108 @@ To incentivise good performance by each party, surety bonds can also be written 
 
 #### Fixed Price Sales
 
-_Pending_
+**Trade Flow**
+
+1. Merchant creates and lists contract
+ - Listing includes notary guid and pubkeys (which the client can verify)
+   - Maybe if the verification fails (3 strikes rule or something) the buyer's node can prune the guid from nodes that they relay or connect to
+ - Includes processing time (maximum time the item must be shipped after receiving an order)
+2. Buyer places an order
+ - Appends network ID, pubkeys (PGP and bitcoin multisig escrow), semantic data unique to the item
+ - Appends shipping address (encrypted to merchant's public PGP key)
+ - Generates and appends 32 byte chaincode to create multisig address
+ - Appends `txid` of funding that multisig address
+3. Merchant ships item
+ - Includes tracking number
+ - Includes signed payout transaction releasing funds from multisig to merchant (i.e. 1 signatures of the 2-of-3 multisig)
+4. Buyer confirms item received
+ - Appends a message (if any) and rating/review data
+ - Signs and broadcasts payout transaction to merchant
+ - Appends `txid` of payout transaction
+
+**Example of listing contract**
+
+```JSON
+{
+    "01_merchant": {
+        "01_listing": {
+            "01_metadata": {
+                "01_obcv": "",
+                "02_expiry": "",
+                "03_category": "",
+                "04_category_sub": "",
+                "05_order_flow": [
+                    "merchant",
+                    "buyer",
+                    "merchant",
+                    "buyer"
+                ]
+            },
+            "02_id": {
+                "01_guid": "",
+                "02_pubkeys": {
+                    "bitcoin": "",
+                    "pgp": ""
+                },
+                "03_handle": "",
+                "04_passcard": "",
+                "05_contact": {
+                    "bitmessage": "",
+                    "email": "",
+                    "subspace": ""
+                },
+                "06_role": "merchant"
+            },
+            "03_item": {
+                "01_title": "",
+                "02_description": "",
+                "03_condition": "",
+                "04_price": {
+                    "bitcoin": 0
+                },
+                "05_shipping": {
+                    "est_delivery": "",
+                    "region": ""
+                },
+                "06_images": {
+                    "image_hashes": [
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                    ],
+                    "image_urls": [
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                    ]
+                },
+                "07_keywords": [
+                    "keyword1",
+                    "keyword2"
+                ]
+            },
+            "04_notary": {
+                "01_guid": "",
+                "02_pubkeys": {
+                    "pgp": "",
+                    "pubkey": "xxx",
+                    "pubkey_selfsig": "XXX"
+                },
+                "03_handle": "",
+                "04_passcard": ""
+            }
+        },
+        "02_signatures": {
+            "bitcoin": "",
+            "pgp": ""
+        }
+    }
+}
+```
 
 #### Auctions
 
@@ -66,63 +169,65 @@ For example, let's imagine Alice wants to sell a yellow pinata on *OpenBazaar*. 
 
 ```JSON
 {
-   "001" : {
-      "listing" : {
-         "id" : {
-            "contact" : {
+   "01" : {
+      "01_listing" : {
+         "01_metadata" : {
+            "01_obcv" : "",
+            "02_expiry" : "",
+            "03_category" : "",
+            "04_category_sub" : "",
+            "05_order_flow" : [ "merchant", "buyer", "merchant", "buyer" ]
+         },
+         "02_id" : {
+            "01_guid" : "",
+            "02_pubkeys" : {
+               "bitcoin" : "",
+               "pgp" : ""
+            },
+            "03_handle" : "",
+            "04_passcard" : "",
+            "05_contact" : {
                "bitmessage" : "",
-               "email" : "alice@alice.com",
+               "email" : "",
                "subspace" : ""
             },
-            "guid" : "zxc987",
-            "handle" : "alice",
-            "onename" : "+alice",
-            "pubkeys" : {
-               "bitcoin" : "xxx",
-               "pgp" : "xxx"
-            },
-            "role" : "merchant"
+            "06_role" : "merchant"
          },
-         "item" : {
-            "condition" : "Good.",
-            "description" : "Good condition, never busted.",
-            "images" : {
-               "image_hashes" : [
-                  "a6e68ab77cb7ca58a8b7e96d3968ad2a4858cca2b6c26e2814c8cb10e50cb00e"
-               ],
-               "image_urls" : [
-                  "https://img0.etsystatic.com/000/0/6342324/il_570xN.326696084.jpg"
-               ]
+         "03_item" : {
+            "01_title" : "",
+            "02_description" : "",
+            "03_condition" : "",
+            "04_price" : {
+               "bitcoin" : 0.0
             },
-            "keywords" : [ "pinata", "yellow" ],
-            "price" : {
-               "buy_now" : 2,
-               "min_sell" : "0.8"
+            "05_shipping" : {
+               "est_delivery" : "",
+               "region" : ""
             },
-            "shipping" : {
-               "est_delivery" : "14 days",
-               "region" : "worldwide"
+            "06_images" : {
+               "image_hashes" : [ "", "", "", "", "" ],
+               "image_urls" : [ "", "", "", "", "" ]
             },
-            "title" : "Yellow pinata"
+            "07_keywords" : [ "keyword1", "keyword2" ]
          },
-         "metadata" : {
-            "category" : "physical good",
-            "category_sub" : "auction",
-            "expiry" : "30 days",
-            "item_code" : "qwerty",
-            "obcv" : "b5.0"
-         },
-         "notary" : {
-            "guid" : "abc123",
-            "handle" : "Acme Notary Service"
+         "04_notary" : {
+            "01_guid" : "",
+            "02_pubkeys" : {
+               "pgp" : "",
+               "pubkey" : "xxx",
+               "pubkey_selfsig" : "XXX"
+            },
+            "03_handle" : "",
+            "04_passcard" : ""
          }
       },
-      "signatures" : {
-         "bitcoin" : "XXX",
-         "pgp" : "XXX"
+      "02_signatures" : {
+         "bitcoin" : "",
+         "pgp" : ""
       }
    }
 }
+
 ```
 
 <img src="https://img0.etsystatic.com/000/0/6342324/il_570xN.326696084.jpg" width="100px"/>
@@ -140,6 +245,13 @@ To further promote good behavior, the arbiter may require a **surety bond** from
 A *non-malicious* versus *malicous* fault may be, for example, a shipping comapany damaging the goods during transport (*non-malicious*) versus the seller knowingly sending a damaged good (*malicious*). The value of the surety bond is negotiable and completely optional. However, it is reasonable to expect that surety bonds will become less necessary between individuals with a high *web of trust* reputation and/or *proof of burn* identity.
 
 ## 4.2 Services
+
+**Index:**
+
+1. Service Contracts
+2. Invitation to Tender (ITT)
+3. Service Listing
+4. Good Performance Bonds
 
 A service contract in *OpenBazaar* replaces a physical good to be sold with the terms and conditions of a service to be performed by one party. The distinction between a good and service within a Ricardian contract is minimal. Morever, the combination of reputation management and surety bonds can ensure a robust service industry within *OpenBazaar*.
 
@@ -283,8 +395,8 @@ The inclusion of GPBs would occur from the outset of the contract's formation, r
 
 **Index:**
 
-1. Ricardian Loan Contracts'
-2. 
+1. Ricardian Loan Contracts
+2. Risk Management
 
 Banks are centralised institutions that, among other things, offer credit to individuals, groups and corporations. Historically, banks were a nexus of borrowers and lenders, matching the *supply* of liquidity to the *demand* for credit. The primary role of a bank was risk management in the form of the due diligence required to assess if a potential borrower was a worthwhile investment. With the advent of nation-state money printing and fractional-reserve banking, whereby money is *lent into existence* and losses are publicly subsidized by inflation and bailouts, the traditional care of risk management for loans has all but been obiliterated.
 
@@ -958,26 +1070,26 @@ While the various fields necessary for a comprehensive contract are difficult to
             "=IB1U"
         ]
     },
-  "Insurance": {
-    "PolicyNonce": "abc123",
-    "Term": "12 months",
-    "Type": "Car",
-    "PolicyValue": "20 BTC",
-    "Reserve": "20 percent",
-    "Coverage": {
-      "Fire": "True",
-      "Water": "True",
-      "Flood": "False",
-      "AccidentalCrash": {
-        "IFCauseClient": "False",
-        "IFCauseNotClient": "True"
-          },
-      }
-    "Client": {
-      "Payments": "0.1 BTC"
-      "PaymentFreq": "Monthly"
-      "Excess": "0.25 BTC"
-      },
+    "Insurance": {
+        "PolicyNonce": "abc123",
+        "Term": "12 months",
+        "Type": "Car",
+        "PolicyValue": "20 BTC",
+        "Reserve": "20 percent",
+        "Coverage": {
+            "Fire": "True",
+            "Water": "True",
+            "Flood": "False",
+            "AccidentalCrash": {
+                "IFCauseClient": "False",
+                "IFCauseNotClient": "True"
+            }
+        },
+        "Client": {
+            "Payments": "0.1 BTC",
+            "PaymentFreq": "Monthly",
+            "Excess": "0.25 BTC"
+        }
     }
 }
 ```
@@ -1003,8 +1115,8 @@ If the courier in this example *did* have a presence on *OpenBazaar*, Alice's in
 
 ## 4.7 Crowd Funding
 
-_Pending_
+_Article Pending_
 
 ## 4.8 Prediction Markets
 
-_Pending_
+_Article Pending_

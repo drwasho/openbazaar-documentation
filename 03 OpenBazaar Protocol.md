@@ -105,11 +105,11 @@ To be 'machine readable', the terms and conditions are formatted in JSON with a 
 
 Ricardian contracts in _OpenBazaar_ will typically have one metadata, trade and ledger module. Multiple ID modules are required to represent each party in the trade (at least 1 merchant, buyer, and notary).
 
-#### Metadata module 
+#### 1. Metadata module 
 
 The **metadata module** is the header of the RC and informs users and the app what type of trade will take place and the period of time the contract is valid. 
 
-#### ID module
+#### 2. ID module
 
 The **ID module** contains the necessary identifying data for a peer on the network. It will contain up to 3 types of ID:
 
@@ -138,173 +138,170 @@ The **ID module** contains the necessary identifying data for a peer on the netw
 
 For the purposes a basic trade, only the *pseudonymous identity* is required. Unlike traditional e-commerce platforms, neither the *meatspace* or *legally accessible* identities are required for trade. This point is as much about maintaining privacy as it is about supporting trade for jurisdictions that lack infrastructure to support ID verification. 
 
-#### Trade module
+#### 3. Trade module
 
 The **trade module** contains the necessary semantic data to define the good or service to be traded for bitcoin. The structure of this module will vary depending on the type of good or service to be traded. As a result, we will pursue community engagement to evolve categories, standards and templates.
 
-#### Ledger module 
+#### 4. Ledger module 
 
 The **ledger module** of the Ricardian contract traces the various stages of the trade between the parties involved. The structure of the ledger will dictate the *signing order*. The ledger module is read by the client/app, which enforces signing and forwarding of the contract to the next appropriate party. The final product is a contract that has a completed signing order and transaction history to act as a tamper-proof *trade receipt*. The structure of the ledger module will also vary according to the type of good and service to be traded for bitcoin. 
 
 The ledger is formatted according to the step-by-step stages where data and signatures are required from each participating party. As a platform, users will be able to design custom Ricardian contracts with unique signing orders to support new types of markets. 
 
-#### Example
+#### 5. Example of a full contract
 
 Below is the contract schema for the sale for a physical good at a fixed price:
 
 ```JSON
 {
-    "genesis": {
-        "merchant": {
-            "metadata": {
-                "obcv": "",
-                "category": "",
-                "subcategory": "",
-                "nonce": "",
-                "expiration_date": ""
+    "01_merchant": {
+        "01_listing": {
+            "01_metadata": {
+                "01_obcv": "",
+                "02_expiry": "",
+                "03_category": "",
+                "04_category_sub": "",
+                "05_order_flow": [
+                    "merchant",
+                    "buyer",
+                    "merchant",
+                    "buyer"
+                ]
             },
-            "id": {
-                "guid": "",
-                "handle": "",
-                "legal_address": "",
-                "pubkeys": {
+            "02_id": {
+                "01_guid": "",
+                "02_pubkeys": {
+                    "bitcoin": "",
+                    "pgp": ""
+                },
+                "03_handle": "",
+                "04_passcard": "",
+                "05_contact": {
+                    "bitmessage": "",
+                    "email": "",
+                    "subspace": ""
+                },
+                "06_role": "merchant"
+            },
+            "03_item": {
+                "01_title": "",
+                "02_description": "",
+                "03_condition": "",
+                "04_price": {
+                    "bitcoin": 0
+                },
+                "05_shipping": {
+                    "est_delivery": "",
+                    "region": ""
+                },
+                "06_images": {
+                    "image_hashes": [
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                    ],
+                    "image_urls": [
+                        "",
+                        "",
+                        "",
+                        "",
+                        ""
+                    ]
+                },
+                "07_keywords": [
+                    "keyword1",
+                    "keyword2"
+                ]
+            },
+            "04_notary": {
+                "01_guid": "",
+                "02_pubkeys": {
                     "pgp": "",
-                    "bitcoin_pubkey": ""
-                }
-            },
-            "trade": {
-                "title": "",
-                "description": "",
-                "price": {
-                    "btc": "",
-                    "fiat": {
-                        "price": "",
-                        "currency": ""
-                    }
+                    "pubkey": "xxx",
+                    "pubkey_selfsig": "XXX"
                 },
-                "images": {
-                    "image1": {
-                        "image_link1": "",
-                        "image_hash1": ""
-                    },
-                    "image2": {
-                        "image_link2": "",
-                        "image_hash2": ""
-                    },
-                    "image3": {
-                        "image_link3": "",
-                        "image_hash3": ""
-                    },
-                    "image4": {
-                        "image_link4": "",
-                        "image_hash4": ""
-                    },
-                    "image5": {
-                        "image_link5": "",
-                        "image_hash5": ""
-                    }
-                },
-                "condition": "",
-                "quantity": "",
-                "keywords": "",
-                "region": "",
-                "estimated_delivery": ""
+                "03_handle": "",
+                "04_passcard": ""
             }
         },
-        "signatures": {
+        "02_signatures": {
+            "bitcoin": "",
             "pgp": ""
         }
     },
-    "ledger":{
-        "stage01": {
-            "buyer" : {
-                "id" : {
-                    "guid": "",
-                    "handle": "",
-                    "legal_address": "",
-                    "pubkeys": {
-                        "pgp": ""
-                    }
-                }
+    "02_buyer": {
+        "02_order": {
+            "01_id": {
+                "01_guid": "",
+                "02_pubkeys": {
+                    "bitcoin": "",
+                    "pgp": ""
+                },
+                "03_handle": "",
+                "04_passcard": "",
+                "05_contact": {
+                    "bitmessage": "",
+                    "email": "",
+                    "subspace": ""
+                },
+                "06_role": "buyer"
             },
-            "signatures": {
-                "pgp": ""
+            "02_item": {
+                "01_semantics": {},
+                "02_shipping_address": ""
+            },
+            "03_multisignature": {
+                "01_chaincode": "",
+                "02_multisignature_address": "",
+                "03_redemption_script": "",
+                "04_txid": ""
             }
         },
-        "stage02": {
-            "notary": {
-                "id":{
-                    "guid": "",
-                    "handle": "",
-                    "legal_address": "",
-                    "pubkeys": {
-                        "pgp": "",
-                        "secp256k1_uncompressed": ""
-                    }
-                },
-                "trade": {
-                    "escrow": {
-                        "multisig_address": "",
-                        "multisig_redemption_script": ""
-                    }
+        "02_signatures": {
+            "bitcoin": "",
+            "pgp": ""
+        }
+    },
+    "03_merchant": {
+        "01_shipped": {
+            "01_shipping": {
+                "01_tracking_id": "",
+                "02_shipper": "",
+                "03_payout": {
+                    "01_payout_address": "",
+                    "02_signed_tx": ""
                 }
-            },
-            "signatures": {
-                "pgp": ""
             }
         },
-        "stage03": {
-            "buyer":{
-                "id":{
-                    "guid":""
-                },
-                "trade":{
-                    "funding_evidence": {
-                        "txid": ""
-                    }
-                }
+        "02_signatures": {
+            "bitcoin": "",
+            "pgp": ""
+        }
+    },
+    "04_buyer": {
+        "01_delivery": {
+            "01_item": {
+                "01_received": true,
+                "02_dispute": false
             },
-            "signatures": {
-                "pgp": ""
+            "02_payout": {
+                "01_signed_tx": "",
+                "02_txid": ""
+            },
+            "03_rating": {
+                "01_rate_merchant": "",
+                "02_rate_item": "",
+                "03_rate_item_description": "",
+                "04_rate_shipping": "",
+                "05_rate_customer_service": "",
+                "06_feedback": ""
             }
         },
-        "stage04": {
-            "merchant": {
-                "id":{
-                    "guid":""
-                },
-                "trade":{
-                    "shipping_info": {
-                        "shipper_ID": "",
-                        "shipper_address": "",
-                        "shipping_tracking_number": ""
-                    },
-                    "releasefunds": {
-                        "signed_tx": ""
-                    }
-                }
-            },
-            "signatures": {
-                "pgp": ""
-            }
-        },
-        "stage05": {
-            "buyer":{
-                "id":{
-                    "guid":""
-                },
-                "trade":{
-                    "release_funds": {
-                        "contract_status": "",
-                        "message": "",
-                        "signed_tx": "",
-                        "txid": ""
-                    }
-                }
-            },
-            "signatures": {
-                "pgp": ""
-            }
+        "02_signatures": {
+            "bitcoin": "",
+            "pgp": ""
         }
     }
 }
