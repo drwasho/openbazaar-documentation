@@ -1,6 +1,6 @@
 # 7. Articles
 
-Index:
+**Index:**
 
 1. OpenBazaar Threat Model
 2. OpenBazaar and Subspace

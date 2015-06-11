@@ -1,29 +1,31 @@
 # 4. Marketplaces
 
-**Trade verticals** in *OpenBazaar* refers to types of markets that can be built on top of the platform. In the theory section of the [Github Readme](https://github.com/OpenBazaar/OpenBazaar), I have attempted to describe in minor detail how different types of markets can be built on the platform. These include:
+**Trade verticals** in *OpenBazaar* refers to types of markets that can be built on top of the platform. In the theory section of the [Github Readme](https://github.com/OpenBazaar/OpenBazaar), I have attempted to describe in minor detail how different types of markets can be built on the platform. 
 
-1. Physical goods
+These include:
+
+1. E-Commerce
+  - Physical goods
     - Fixed price
     - Auctions
-2. Digital goods
-3. Services
+  - Digital goods
+2. Services
     - Invitation to tender
     - Auction 
     - Fixed rate
-4. Lending
+3. Lending
     - P2P lending
     - Bonds
-5. Financial securities
+4. Financial securities
     - Stocks
     - Futures (bounded futures) 
     - Options
     - Swaps
-6. Crowd funding
-7. Insurance
-8. Currency exchange
-9. Barter
-10. Prediction markets 
-11. Other
+5. Crowd funding
+6. Insurance
+7. Currency exchange
+8. Prediction markets 
+
 
 <img src="http://s25.postimg.org/9qy5zjaa7/Open_Bazaar_Stack.jpg" />
 
@@ -37,13 +39,15 @@ The challenge for *market developers* is to design RCs that capture the semantic
 
 To incentivise good performance by each party, surety bonds can also be written into the contract. Surety bonds essentially reward or penalise a trading party based on performance criteria, which would be clearly stated within the RC. 
 
-## 4.1 Physical and Digital Ecommerce
+## 4.1 E-Commerce
 
-### 4.1.1 Fixed Prices
+### 4.1 Physical Goods
+
+#### Fixed Price Sales
 
 _Pending_
 
-### 4.1.2 Auctions
+#### Auctions
 
 It is becoming increasingly clear that *OpenBazaar* will become a powerful platform that will support a variety of peer-to-peer market transactions. One of the most fundamental market transaction types is the *auction* of a good by a seller to discover the market price. In this article, we cover one possible way of auctioning a good using *Ricardian contracts*. 
 
@@ -127,7 +131,7 @@ Bob accesses the contract and chooses to bid on the pinata, appending his ID det
 
 Due to the architecture of the P2P network setup, Alice may not be available 24/7 during the term of her **auction contract** to update the market on the latest bid price of the item. As a result, she may choose to upload her contract on a 24/7 accessible node (a **negotiator node**) that acts as a contract *server*. If so, the **negotiator node** will create their own contract for the item, digitally sign **bid contracts**, update the `"current_bid"`, and turn over the final **bid contract** to Alice for her digital signature at the end of the contract/auction expiration date. If Alice digitally signs the contract, the contract is sent to an arbiter for sigining and creation of the multisignature bitcoin address for Bob, the winning bidder, to send funds to. As a reward for hosting the contract, the **negotiator node** is rewarded by a fee paid for by Alice (via another multisignature address setup with anoter arbiter). If Alice disapproves of how the contract was negotiated by the **negotiator node** on her behalf, she can simply refuse to sign the contract and raise a dispute to the arbiter for a refund of the fee from the multisignature address.
 
-#### Insurance
+##### Insurance
 
 For the seller (Alice), she can have confidence that the funds for the item actually exist once Bob has sent the required amount of bitcoins to the multisignature bitcoin address, upon which she will ship the item to Bob's designated address. Similarly for Bob, he can retrieve the funds from the multisignature address if he can prove to the arbiter's satisfaction that he goods either did not arrive, or did not arrive in the condition specified in the contract.
 
@@ -277,11 +281,183 @@ The inclusion of GPBs would occur from the outset of the contract's formation, r
 
 ## 4.3 Lending
 
+**Index:**
 
+1. Ricardian Loan Contracts'
+2. 
+
+Banks are centralised institutions that, among other things, offer credit to individuals, groups and corporations. Historically, banks were a nexus of borrowers and lenders, matching the *supply* of liquidity to the *demand* for credit. The primary role of a bank was risk management in the form of the due diligence required to assess if a potential borrower was a worthwhile investment. With the advent of nation-state money printing and fractional-reserve banking, whereby money is *lent into existence* and losses are publicly subsidized by inflation and bailouts, the traditional care of risk management for loans has all but been obiliterated.
+
+Peer-to-peer (P2P) lending has emerged as a means to decentralise the oligopolistic hold that banks possess in every category for lending. While P2P lending is still in early days, regulatory pressure is mounting making P2P lending services using fiat dollars especially vulnerable to the legacy financial/political order. Using Bitcoin, this legacy threat is largely eliminated, but introduces new problems in the traditional approach of risk management. The purpose of this article is to suggest possible solutions to these problems and how they might be executed on a pseudonymous censorship-resistant marketplace like *OpenBazaar*.
+
+### 4.3.1. Ricardian Loan Contracts
+
+As with other goods and services on *OpenBazaar*, the loan is drawn up as a [Ricardian-style contract](https://github.com/OpenBazaar/OpenBazaar/blob/master/docs/Ricardian-Contracts.md) that I will refer to as the **loan contract** for the rest of the article. The loan contract is initially written by the *borrower* and distributed/published on the *OpenBazaar* network, as the borrower is trying to convince the market to purchase their unmaterialized future good (a interest markup of the original loan amount).
+
+Let us imagine a *borrower*, Bob, and a *creditor*, Alice:
+
+**Step 1: Debtor creates a loan contract**
+
+The loan contract specifies that Bob wishes to exchange **110 mBTC in 1 year** for **100 mBTC now** (i.e. Bob wants to borrow 100 mBTC). The interest rate is 10% p.a. The following fields are introduced in the **loan contract**:
+
+```
+1. Loan_amount: 100 mBTC
+2. Loan_term: 1 year   
+3. Interest_rate: 10% p.a.
+4. Interest calculated: monthly
+5. Payment schedule: monthly
+6. Address and self-signature
+```
+
+Bob digitally signs the contract and publishes it to the network.
+
+```JSON
+{
+    "001": {
+        "01_debtor": {
+            "01_metadata": {
+                "category": "loan",
+                "category_sub": "fixed term",
+                "contract_expiry": "30 days",
+                "obcv": "b5.0"
+            },
+            "02_id": {
+                "contact": {
+                    "bitmessage": "",
+                    "email": "alice@alice.com",
+                    "subspace": ""
+                },
+                "guid": "zxc987",
+                "handle": "alice",
+                "onename": "+alice",
+                "pubkeys": {
+                    "bitcoin": "xxx",
+                    "pgp": "xxx"
+                },
+                "role": "debtor"
+            },
+            "03_notary": {
+                "guid": "abc123",
+                "handle": "Acme Notary Service",
+                "keys": {
+                    "pubkey": "xxx",
+                    "self_sig": "XXX"
+                }
+            },
+            "04_loan": {
+                "debt": "100 mBTC",
+                "interest_calc": "monthly",
+                "interest_rate_perc": "10",
+                "keywords": [
+                    "loan",
+                    "10% pa"
+                ],
+                "loan_address": {
+                    "btc_address": "xxx",
+                    "self_sig": "XXX"
+                },
+                "repayments": "monthly",
+                "term": "365 days"
+            }
+        },
+        "02_signatures": {
+            "bitcoin": "XXX",
+            "pgp": "XXX"
+        }
+    }
+}
+```
+
+**Step 2: Creditor accepts the loan contract**
+
+Alice agrees with the contract and appends the following data:
+
+1. Network ID (plus any other ID data)
+  - Indicates the role of Alice as a `creditor`
+2. A schedule of repayment bitcoin addresses (i.e. an address for each month across the term of the loan)
+  - There are an estimated 12 repayment schedules in the example, so Alice attached 12 unique addresses for Bob to send each repayment
+3. Multisignature escrow details
+  - Multisignature address generated from the debtor, creditor, and notary
+    - Redemption script
+  - _Funds will be released from multisignature escrow to the exclusive control of the debtor after confirmation; notary stands by refund the creditor if a problem arises before confirmation_
+  - `TXID` of the creditor funding the multisignature address
+
+If Alice wants to change the terms of part of the contract, she can write, sign and send a fresh contract to Bob. If Bob disagrees, he can simply ignore the contract, or sign it if the change in terms acceptable (e.g. Alice increases the interest rate to 11% p.a., or changes the schedule to fortnightly repayments). Note that this is the only stage where this can happen as once both parties have signed the terms of the contract, it is locked-in as far as dispute resolution is concerned.
+
+**Step 3: Loan confirmed**
+
+Bob (debtor) confirms that the loan will proceed and appends a signed transaction releasing the funds into his control.
+
+**Step 4: The creditor signs and releases funds to the debtor**
+
+Alice (creditor) signs and broadcasts the transaction from step 3, releasing funds to Bob.
+
+**Step 4+n: Repayments**
+
+For every repayment, Bob appends to the loan contract evidence of the repayment addresses being funded along with the outstanding balance of the loan, until it is paid off.
+
+### 4.3.2. Risk Management
+
+#### 1. Credit Ratings and Collateral
+
+The process above has thus far described how the **loan contract** is created and processed for auditing purposes by the arbiter. However, it has not dealt with how **loan contracts** will be protected from fraud by bad actors on *OpenBazaar*. Traditionally, there are two major ways to manage risk for potential loans:
+
+1. Assess the borrower's **credit rating**
+2. Require **collateral** for the loan
+
+##### Credit Rating
+
+> an estimate of the ability of a person or organization to fulfill their financial commitments, based on previous dealings.
+
+As a credit rating often involves an individual disclosing their income and previous financial dealings to the creditor and other third parties, the concept of a traditional credit rating is incompatible with the goals and purpose of *OpenBazaar*. New and innovative solutions are required assess the credit-worthiness of an individual in a pseudonymous marketplace.  
+
+##### Collateral
+
+> something pledged as security for repayment of a loan, to be forfeited in the event of a default.
+
+A borrower must provide *collateral* to the creditor before a loan is approved. *Collateral* can be any good belonging to the borrower that has an equivalent value to the amount being loaned. In case of a credit default, the creditor can physically possess the *collateral* to recover their losses.
+
+#### 2. Web of Credit
+
+Taking the *web of trust* concept one step further, *OpenBazaar* can facilitate peers extending lines of credit to each other. If there is a successful trade between Alice and Bob, Alice may choose to extend a 5 mBTC line of credit to Bob. Bob can borrow this money at any time according to the prescribed conditions set by Alice. The funds can be kept in a 2-of-3 multisignature address, using an arbiter as a third signature. This line of credit can be publicly disclosed and audited by other peers. The aggregate of a pseudonym's line of credit becomes a powerful and informative risk signal for other peers, with risk being inversely proportional to the sum total line of credit.
+
+The line of credit can be considered as collateral by a potential creditor, knowing that a pseudonym's line of credit can be called upon to satisfy a renumberation of second loan. For individual extending lines of credit, they have an opportunity to invest in successful and well-regarded trade partners.
+
+#### 3. Collateral as User-Created Assets
+
+In *OpenBazaar*, collateral can be transferred by digitally signing possession of a user-created asset, represented by a Ricardian contract. Briefly, Jack may posses 0.1 ounces of gold and wants to exchange it for other goods and services on *OpenBazaar*. Jack writes a contract stating that he has possession of 0.1 ounces of gold. To sign ownership of that contract to another individual, Jill, Jack can create a fresh contract with the following data:
+
+1. A encrypted copy of the old contract using Jill's public key
+2. Updated ownership details (i.e. Jill owns 0.1 ounces of gold)
+
+The new contract is then digitally signed with Jack's private key. Now, this entire process assumes that Jack actually has 0.1 ounces of gold behind the contract and is able to physically transfer the goods or their custody (if a third party, like a vault, is holding them). The burden of proof will be on Jack to demonstrate to Jill that contract is valid. Jack can also seek other highly rated (web of trust) third parties or arbiters to sign the initial contract after they are satisfied with Jack's proof.
+
+Outside of the Ricardian contract model in *OpenBazaar*, user-generated assets from colored coins or other sources (Mastercoin, Counterparty, OpenTransactions etc), can also be offered as *collateral* for a loan.
+
+### Part 4: Collateral and Distributed Collateralized Trusts
+
+What if a user like Bob is unable to provide sufficient *collateral* for the loan due to either: 1) his wealth status living in a developing country, or 2) providing *collateral* in the traditional sense would reveal his pseudonym's identity?
+
+One possible solution is for Bob to purchase *collateral* from a **distributed collateralized trust** or **dCT**. A **dCT** is a collection of users that pool a certain value of funds in essentially a term deposit. This term deposit serves as *collateral* for a loan in the event that the borrower defaults. In return for this risk, the borrower pays each member of the trust a fee that makes up the effective interest rate of the term deposit. Using the example thus far, Bob purchases 100 mBTC collateral from a 10 member **dCT** at the price of 10 mBTC. Under this arrangement, each member of the **dCT** risks 10 mBTC for a term of 1 year for a return of 1 mBTC (or roughly 10% p.a.), paid for in advance by Bob's fee
+
+Alternatively, Alice could forgo Bob's collateral in favor of a 10 mBTC downpayment upfront. However, Alice will not be compensated if there is a default on the loan. This option could be viable if Alice routinely lends funds to Bob and extends to him a sufficient level of trust.
+
+dCTs however, confer a number of advantages:
+
+1. Overall level of risk is spread
+2. Multiple layers of due diligence
+  - Both the creditor and the dCT will need to evaluate the profitability of lending to Bob, decreasing the chances of spurious lending
+  - The dCT can also examine the track record of the creditor, Alice, for their success in picking borrowers
+  - The purpose of the loan can be interrogated, and if possible, funds can incrementally be released
+3. Promotes liquidity
+  - The creditor has, in effect, insurance in lending
+  - The level of risk that is an obstacle for the lender is now lower than the level of risk for each member of the dCT, making relatively capital-intensive loans possible
+
+A dCT is not necessarily appropriate for small-medium sized loans, as a borrow can crowd-source the loan as the level of risk is especially low. However, it will be up to the creditor to evaluate their level of risk tolerance and what steps they take to manage that risk.
 
 ## 4.4 Financial Securities
 
-#### Bounded Futures
+### Bounded Futures
 
 A forward contract is an agreement to buy an item for an agreed price in future. For example it might be possible to agree to purchase a barrel of crude oil a month from now for $100. If in a month the market price of crude is higher than $100, then the contract has positive value. If the price is lower, the contract has negative value.
 
@@ -319,7 +495,7 @@ However good things do not come for free, and there is a reason why spread contr
 
 Bounded futures contracts are natural structures for decentralized markets where trading volumes are likely to be patchy and trust difficult to establish. Parties to the contract can determine how much risk they want to be exposed to and for how long. This removes the usual problems of margining (collateral) from the exchange in exchange for creating a problem by dividing liquidity between multiple contracts. But on net this trade is worthwhile: it allows a completely decentralized and autonomously operating futures market and an extraordinary flexibility of financial structures.
 
-##### Example of a bounded futures contract as a hedge for a sale contract
+#### Example of a bounded futures contract as a hedge for a sale contract
 
 Suppose we have the following scenario:
  
@@ -349,7 +525,7 @@ where F is the bounded contract "price" which makes the contract a fair trade fo
 (**) In the limit as the bound approaches zero this is known as the “risk neutral” probability. This allows a probability distribution (the “risk neutral distribution”) to be constructed across the range of price where the contract trades.
 ```
 
-#### 2. Bounded Futures Ricardian Contract for *OpenBazaar*
+### 2. Bounded Futures Ricardian Contract for *OpenBazaar*
 
 This is an example of a bounded futures contract that may be issued in *OpenBazaar*:
 
