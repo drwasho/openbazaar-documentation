@@ -7,11 +7,11 @@ Repository for _OpenBazaar_ documentation that is hosted on the Wiki and https:/
 
 # Index
 
-1. [What is OpenBazaar?](https://github.com/drwasho/openbazaar-documentation/blob/master/01%20Index%20and%20What%20is%20OpenBazaar.md#1-what-is-openbazaar)
-    + [1.1 What does it do?](https://github.com/drwasho/openbazaar-documentation/blob/master/01%20Index%20and%20What%20is%20OpenBazaar.md#11-what-does-it-do)
-    + [1.2 What does it enable?](https://github.com/drwasho/openbazaar-documentation/blob/master/01%20Index%20and%20What%20is%20OpenBazaar.md#12-what-does-it-enable)
-    + [1.3 What problems does it solve?](https://github.com/drwasho/openbazaar-documentation/blob/master/01%20Index%20and%20What%20is%20OpenBazaar.md#13-what-problems-does-it-solve)
-    + [1.4 What is the philosophy of the project?](https://github.com/drwasho/openbazaar-documentation/blob/master/01%20Index%20and%20What%20is%20OpenBazaar.md#14-what-is-the-philosophy-of-the-project)
+1. [What is OpenBazaar?](https://github.com/drwasho/openbazaar-documentation/blob/master/01%20What%20is%20OpenBazaar.md#1-what-is-openbazaar)
+    + [1.1 What does it do?](https://github.com/drwasho/openbazaar-documentation/blob/master/01%20What%20is%20OpenBazaar.md#11-what-does-it-do)
+    + [1.2 What does it enable?](https://github.com/drwasho/openbazaar-documentation/blob/master/01%20What%20is%20OpenBazaar.md#12-what-does-it-enable)
+    + [1.3 What problems does it solve?](https://github.com/drwasho/openbazaar-documentation/blob/master/01%20What%20is%20OpenBazaar.md#13-what-problems-does-it-solve)
+    + [1.4 What is the philosophy of the project?](https://github.com/drwasho/openbazaar-documentation/blob/master/01%20What%20is%20OpenBazaar.md#14-what-is-the-philosophy-of-the-project)
 2. [Getting started](https://github.com/drwasho/openbazaar-documentation/blob/master/02%20Getting%20Started.md#2-getting-started)  
     + [2.1 Installation](https://github.com/drwasho/openbazaar-documentation/blob/master/02%20Getting%20Started.md#21-installation)  
     + [2.2 User guide](https://github.com/drwasho/openbazaar-documentation/blob/master/02%20Getting%20Started.md#22-user-guide)  
