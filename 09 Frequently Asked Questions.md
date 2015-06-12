@@ -16,9 +16,7 @@ The platform uses a reputation and rating system, as well as allowing reputable 
 
 Sellers on the OpenBazaar network host their own products and are therefore directly responsible for complying with local laws (and their own conscience) when listing items or services. Users engaged in illicit activity cannot hide behind a third party service.
 
-The world doesn’t have a standard protocol for trading goods and services online, nor does it have a network to share information about those goods and services. OpenBazaar finally creates a protocol and network that is free and open for all. As such, we expect that the use of OpenBazaar will largely reflect how society trades at large - almost entirely legitimate, positive trade with a small portion of people using it for illicit activity.
-
-OB1 helps build and facilitate trade on the OpenBazaar network, and we will do everything in our power to encourage legal trade on the network. We haven’t volunteered a year of our time - and now left our careers to start this business - in order to create a new way to trade drugs. We are doing this to build the future of all trade.
+The world doesn’t have a standard protocol for trading goods and services online, nor does it have a network to share information about those goods and services. OpenBazaar finally creates a protocol and network that is free and open for all. As such, we expect that the use of OpenBazaar will largely reflect how society trades at large - almost entirely legitimate, positive trade with a small portion of people using it for illicit activity. Those that attempt to sell illicit material on _OpenBazaar_ do so at significant risk to themselves.
 
 ### What about OpenBazaar’s beginnings as Dark Market?
 
