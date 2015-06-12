@@ -1,6 +1,6 @@
 # 8. Reference Documentation
 
-## Bitcoin
+## 8.1 Bitcoin
 
 + [Bitcoin: A Peer-to-Peer Electronic Cash System](https://bitcoin.org/bitcoin.pdf) - Satoshi Nakamoto
 + [Bitcoin.org](https://Bitcoin.org)
@@ -9,22 +9,22 @@
 + [Multisignature Transactions](https://en.bitcoin.it/wiki/Multisignature)
 + [Multisignature Tools](https://coinb.in/multisig)
 
-## Peer-to-Peer Networking
+## 8.2 Peer-to-Peer Networking
 
 + [Kademlia distributed hash table](https://en.wikipedia.org/wiki/Kademlia)
 + [Strategies for defeating NAD configuration issues](https://gist.github.com/gubatron/422d8377d263f50de0a6)
 
-## Ricardian Contracts
+## 8.3 Ricardian Contracts
 
 + [The Ricardian Contract](http://iang.org/papers/ricardian_contract.html) - Ian Grigg
 + [Triple-entry accounting](http://iang.org/papers/triple_entry.html) - Ian Grigg
 
-## Security Layer
+## 8.4 Security Layer
 
 + [TOR](https://www.torproject.org/)
 + [I2P Wiki](https://en.wikipedia.org/wiki/I2P)
 
-## Related Projects
+## 8.5 Related Projects
 
 + [Passcards](http://blog.onename.com/passcards/)
 + [Onename](https://onename.com)
