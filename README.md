@@ -1,3 +1,5 @@
+![openbazaar](https://camo.githubusercontent.com/140995019bcc360028133b09df336bb36e7f9381/687474703a2f2f692e696d6775722e636f6d2f577750555847532e706e67)
+
 OpenBazaar Documentation
 ===
 
