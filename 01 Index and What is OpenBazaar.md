@@ -68,7 +68,7 @@ This project is [open source](https://github.com/openbazaar/openbazaar), which m
 + A buyer directly connects and purchases the good from the merchant using Bitcoin
 + Bitcoin payments can be made via escrow to protect merchants and buyers during trade 
 
-## What does it enable?
+## 1.2 What does it enable?
 
 + An online marketplace that is:
 	1. Scalable to millions of stores
@@ -76,7 +76,7 @@ This project is [open source](https://github.com/openbazaar/openbazaar), which m
 	3. Cannot be censored
 	4. Frictionless trade
 
-## 1.2 What problems does it solve?
+## 1.3 What problems does it solve?
 
 + Hosting an online store
 	+ Easy to deploy
@@ -85,7 +85,7 @@ This project is [open source](https://github.com/openbazaar/openbazaar), which m
 	+ Eliminates fees related to listing on a platform
 	+ Significantly reduces payment fees via Bitcoin (i.e. fractions of a cent)
 
-## 1.3 What is the philosophy of the project?
+## 1.4 What is the philosophy of the project?
 
 + Our **vision** is to _make trade free_. 
 + Our **mission** is to _shift global trade onto a decentralised platform_, _OpenBazaar_.
