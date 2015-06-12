@@ -313,7 +313,7 @@ Within the `ledger` section of the contract, the _signing order_ is divided into
 
 An abstraction of the signing order:
 
-![signing order](http://s25.postimg.org/qtasu99zj/Sign_and_forward.jpg)
+![signing order](http://s25.postimg.org/yj1lmbwi7/Trade_Flow_Ecommerce_Physical_Goods_Fixed.jpg)
 
 The _signing order_ should be defined in the structure of the JSON contract.
 

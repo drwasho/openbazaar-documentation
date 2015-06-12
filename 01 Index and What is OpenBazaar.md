@@ -6,10 +6,10 @@ _OpenBazaar_ Documentation
 # Index
 
 1. What is _OpenBazaar_?
-	+ What does it do?
-	+ What does it enable?
-	+ What problems does it solve?
-	+ What is the philosophy of the project?
+	+ 1.1 What does it do?
+	+ 1.2 What does it enable?
+	+ 1.3 What problems does it solve?
+	+ 1.4 What is the philosophy of the project?
 2. Getting started  
 	+ 2.1 Installation  
 		+ Windows
@@ -60,7 +60,7 @@ _OpenBazaar_ is a different approach to online commerce. It puts the power back 
 
 This project is [open source](https://github.com/openbazaar/openbazaar), which means the code is publicly available for people to review or audit, as well as contribute code to make it better.
 
-## What does it do?
+## 1.1 What does it do?
 
 + Creates an online store for users to sells goods for Bitcoin
 + Connects these stores directly to each other on a global network
@@ -76,7 +76,7 @@ This project is [open source](https://github.com/openbazaar/openbazaar), which m
 	3. Cannot be censored
 	4. Frictionless trade
 
-## What problems does it solve?
+## 1.2 What problems does it solve?
 
 + Hosting an online store
 	+ Easy to deploy
@@ -85,7 +85,7 @@ This project is [open source](https://github.com/openbazaar/openbazaar), which m
 	+ Eliminates fees related to listing on a platform
 	+ Significantly reduces payment fees via Bitcoin (i.e. fractions of a cent)
 
-## What is the philosophy of the project?
+## 1.3 What is the philosophy of the project?
 
 + Our **vision** is to _make trade free_. 
 + Our **mission** is to _shift global trade onto a decentralised platform_, _OpenBazaar_.
