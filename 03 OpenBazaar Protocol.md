@@ -3,11 +3,11 @@
 _OpenBazaar_ is a marketplace platform compromised of the following components:
 
 1. **The Kademlia-style Peer-to-Peer (P2P) Network**
-    + _The network architecture governing peer-to-peer connections_ 
+    - _The network architecture governing peer-to-peer connections_ 
 2. **The Trade Protocol**
-    + _The fundamental rules governing the type trade between peers_
+    - _The fundamental rules governing the type trade between peers_
 3. **The Application**
-    + _How a users access the network and executes the trades protocol_
+    - _How a users access the network and executes the trades protocol_
 
 Users download the _OpenBazaar_ `application` to access the `network` and execute the `trade protocol` with other users on the network.
 
@@ -52,9 +52,9 @@ The trade protocol describes a set of fundamental rules that govern decentralise
 The protocol is made up of two major sub-components:
 
 1. Bitcoin Payments and Escrow
-  + Payment options for trade
+    - Payment options for trade
 2. Ricardian Contracts
-  + Formalizes the terms of trade
+    - Formalizes the terms of trade
 
 ### 3.2.1 Bitcoin Payments and Escrow
 
