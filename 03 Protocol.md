@@ -1,4 +1,4 @@
-# 3. _OpenBazaar_ Protocol
+# 3. Protocol
 
 _OpenBazaar_ is a marketplace platform compromised of the following components:
 
