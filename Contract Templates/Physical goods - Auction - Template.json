@@ -1,0 +1,66 @@
+{
+   "001" : {
+      "listing" : {
+         "id" : {
+            "contact" : {
+               "bitmessage" : "",
+               "email" : "alice@alice.com",
+               "subspace" : ""
+            },
+            "guid" : "zxc987",
+            "handle" : "alice",
+            "onename" : "+alice",
+            "pubkeys" : {
+               "bitcoin" : "xxx",
+               "pgp" : "xxx"
+            },
+            "role" : "merchant"
+         },
+         "item" : {
+            "condition" : "Good.",
+            "description" : "Good condition, never busted.",
+            "images" : {
+               "image_hashes" : [
+                  "a6e68ab77cb7ca58a8b7e96d3968ad2a4858cca2b6c26e2814c8cb10e50cb00e",
+                  "",
+                  "",
+                  "",
+                  ""
+               ],
+               "image_urls" : [
+                  "https://img0.etsystatic.com/000/0/6342324/il_570xN.326696084.jpg",
+                  "",
+                  "",
+                  "",
+                  ""
+               ]
+            },
+            "keywords" : [ "pinata", "yellow" ],
+            "price" : {
+               "buy_now" : 2,
+               "min_sell" : "0.8"
+            },
+            "shipping" : {
+               "est_delivery" : "14 days",
+               "region" : "worldwide"
+            },
+            "title" : "Yellow pinata"
+         },
+         "metadata" : {
+            "category" : "physical good",
+            "category_sub" : "auction",
+            "expiry" : "30 days",
+            "item_code" : "qwerty",
+            "obcv" : "b5.0"
+         },
+         "notary" : {
+            "guid" : "abc123",
+            "handle" : "Acme Notary Service"
+         }
+      },
+      "signatures" : {
+         "bitcoin" : "XXX",
+         "pgp" : "XXX"
+      }
+   }
+}

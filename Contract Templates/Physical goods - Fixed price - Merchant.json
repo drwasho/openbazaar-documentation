@@ -1,0 +1,132 @@
+{
+   "01_merchant" : {
+      "01_listing" : {
+         "01_metadata" : {
+            "01_obcv" : "",
+            "02_expiry" : "",
+            "03_category" : "physical goods",
+            "04_category_sub" : "fixed price",
+            "05_order_flow" : [ "merchant", "buyer", "merchant", "buyer" ]
+         },
+         "02_id" : {
+            "01_guid" : "",
+            "02_pubkeys" : {
+               "bitcoin" : "",
+               "pgp" : ""
+            },
+            "03_handle" : "",
+            "04_passcard" : "",
+            "05_contact" : {
+               "bitmessage" : "",
+               "email" : "",
+               "subspace" : ""
+            },
+            "06_role" : "merchant"
+         },
+         "03_item" : {
+            "01_title" : "",
+            "02_description" : "",
+            "03_condition" : "",
+            "04_price" : {
+               "bitcoin" : 0.0
+            },
+            "05_shipping" : {
+               "est_delivery" : "",
+               "region" : ""
+            },
+            "06_images" : {
+               "image_hashes" : [ "", "", "", "", "" ],
+               "image_urls" : [ "", "", "", "", "" ]
+            },
+            "07_keywords" : [ "keyword1", "keyword2" ]
+         },
+         "04_notary" : {
+            "01_guid" : "",
+            "02_pubkeys" : {
+               "pgp" : "",
+               "pubkey" : "xxx",
+               "pubkey_selfsig" : "XXX"
+            },
+            "03_handle" : "",
+            "04_passcard" : ""
+         }
+      },
+      "02_signatures" : {
+         "bitcoin" : "",
+         "pgp" : ""
+      }
+   },
+   "02_buyer" : {
+      "02_order" : {
+         "01_id" : {
+            "01_guid" : "",
+            "02_pubkeys" : {
+               "bitcoin" : "",
+               "pgp" : ""
+            },
+            "03_handle" : "",
+            "04_passcard" : "",
+            "05_contact" : {
+               "bitmessage" : "",
+               "email" : "",
+               "subspace" : ""
+            },
+            "06_role" : "buyer"
+         },
+         "02_item" : {
+            "01_semantics" : {},
+            "02_shipping_address" : ""
+         },
+         "03_multisignature" : {
+            "01_chaincode" : "",
+            "02_multisignature_address" : "",
+            "03_redemption_script" : "",
+            "04_txid" : ""
+         }
+      },
+      "02_signatures" : {
+         "bitcoin" : "",
+         "pgp" : ""
+      }
+   },
+   "03_merchant" : {
+      "01_shipped" : {
+         "01_shipping" : {
+            "01_tracking_id" : "",
+            "02_shipper" : "",
+            "03_payout" : {
+               "01_payout_address" : "",
+               "02_signed_tx" : ""
+            }
+         }
+      },
+      "02_signatures" : {
+         "bitcoin" : "",
+         "pgp" : ""
+      }
+   },
+   "04_buyer" : {
+      "01_delivery" : {
+         "01_item" : {
+            "01_received" : true,
+            "02_dispute" : false
+         },
+         "02_payout" : {
+            "01_signed_tx" : "",
+            "02_txid" : ""
+         },
+         "03_rating" : {
+            "01_rate_merchant" : "",
+            "02_rate_item" : "",
+            "03_rate_item_description" : "",
+            "04_rate_shipping" : "",
+            "05_rate_customer_service" : "",
+            "06_feedback" : ""
+         }
+      },
+      "02_signatures" : {
+         "bitcoin" : "",
+         "pgp" : ""
+      }
+   }
+}

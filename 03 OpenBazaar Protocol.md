@@ -114,7 +114,7 @@ Similar to altcoins, fiat payments may be supported using third party services t
 > A *Ricardian Contract* can be defined as a single document that is **a)** a contract offered by an issuer to holders, **b)** for a valuable right held by holders, and managed by the issuer, **c)** easily readable by people (like a contract on paper), **d)** readable by programs (parsable like a database), **e)** digitally signed, **f)** carries the keys and server information, and **g)** allied with a unique and secure identifier.  
 [- Ian Grigg](http://iang.org/papers/ricardian_contract.html)
 
-Ricardian contracts (RCs) are digital documents that record an agreement between multiple parties, which are signed and cryptographically verified, and formatted to be human and machine-readable. The one-way hash of RC establish a tamper-proof receipt of the terms and conditions of a trade, which eliminates potential disputes that may arise from hearsay claims between counterparties.
+Ricardian contracts (RC) are digital documents that record an agreement between multiple parties, which are signed and cryptographically verified, and formatted to be human and machine-readable. The one-way hash of RC establish a tamper-proof receipt of the terms and conditions of a trade, which eliminates potential disputes that may arise from hearsay claims between counterparties.
 
 To be 'machine readable', the terms and conditions are formatted in JSON with a hierarchy of attribute-value pairs: the contract schema. As there are multiple types of trade that _OpenBazaar_ aims to support, each will have its own contract schema. Common to all schemas are four modules:
 
@@ -131,10 +131,10 @@ The **metadata module** is the header of the RC and informs users and the app wh
 
 #### 3.2.2.2 ID module
 
-The **ID module** contains the necessary identifying data for a peer on the network. It will contain up to 3 types of ID:
+The **ID module** contains the necessary identifying data for a peer on the network. It will contain the following types of ID:
 
-1. Pseudonymous ID (minimum ID required for a trade on the network)
-    - GUID
+1. Network ID (minimum ID required for a trade)
+    - GUID (global unique identifier)
         - Unique network identifier
         - One GUID per node on the network 
     - Bitcoin pubkey
@@ -145,14 +145,10 @@ The **ID module** contains the necessary identifying data for a peer on the netw
         - Used to sign contracts
         - Establishes a 'mobile' identity 
         - Multiple nodes can provably belong to 1 PGP key
-    - Contact addresses
-        - Email
-        - BitMessage
-        - Subspace
-2. Meatspace identity 
-    - Your real name 
-    - Connections to social media accounts
-    - Onename ID 
+2. Passcard ID 
+    - [Passcard](https://passcard.info/) - Digital identity as per the 'Blockchain Name System'
+        + Links to email and other communication channels
+        + Verified links to social networking platforms
 3. Legally accessible ID 
     - Contact details that are verified by a third party (think certificate authorities), which basically verifies that this identity is legally accessible in the event of some dispute that needs to be resolved in court 
 
@@ -170,8 +166,6 @@ The ledger is formatted according to the step-by-step stages where data and sign
 
 #### 3.2.2.5 Example of a full contract
 
-Below is the contract schema for the sale for a physical good at a fixed price:
-
 ```JSON
 {
     "01_merchant": {
@@ -179,8 +173,8 @@ Below is the contract schema for the sale for a physical good at a fixed price:
             "01_metadata": {
                 "01_obcv": "",
                 "02_expiry": "",
-                "03_category": "",
-                "04_category_sub": "",
+                "03_category": "physical good",
+                "04_category_sub": "fixed price",
                 "05_order_flow": [
                     "merchant",
                     "buyer",

@@ -1,0 +1,51 @@
+{
+   "001" : {
+      "01_debtor" : {
+         "01_metadata" : {
+            "category" : "loan",
+            "category_sub" : "fixed term",
+            "contract_expiry" : "30 days",
+            "obcv" : "b5.0"
+         },
+         "02_id" : {
+            "contact" : {
+               "bitmessage" : "",
+               "email" : "alice@alice.com",
+               "subspace" : ""
+            },
+            "guid" : "zxc987",
+            "handle" : "alice",
+            "onename" : "+alice",
+            "pubkeys" : {
+               "bitcoin" : "xxx",
+               "pgp" : "xxx"
+            },
+            "role" : "debtor"
+         },
+         "03_notary" : {
+            "guid" : "abc123",
+            "handle" : "Acme Notary Service",
+            "keys" : {
+               "pubkey" : "xxx",
+               "self_sig" : "XXX"
+            }
+         },
+         "04_loan" : {
+            "debt" : "100 mBTC",
+            "interest_calc" : "monthly",
+            "interest_rate_perc" : "10",
+            "keywords" : [ "loan", "10% pa" ],
+            "loan_address" : {
+               "btc_address" : "xxx",
+               "self_sig" : "XXX"
+            },
+            "repayments" : "monthly",
+            "term" : "365 days"
+         }
+      },
+      "02_signatures" : {
+         "bitcoin" : "XXX",
+         "pgp" : "XXX"
+      }
+   }
+}

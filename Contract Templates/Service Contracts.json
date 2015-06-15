@@ -1,0 +1,41 @@
+{
+   "001" : {
+      "order" : {
+         "id" : {
+            "contact" : {
+               "bitmessage" : "",
+               "email" : "",
+               "subspace" : ""
+            },
+            "guid" : "",
+            "handle" : "",
+            "onename" : "",
+            "pubkeys" : {
+               "bitcoin" : "xxx",
+               "pgp" : "xxx"
+            },
+            "role" : "customer"
+         },
+         "metadata" : {
+            "category" : "service",
+            "category_sub" : "invitation to tender",
+            "contract_code" : "123-xyz",
+            "expiry" : "3 hours",
+            "obcv" : "b5.0"
+         },
+         "order" : {
+            "comments" : "Hi, I'd like to deliver the cupcakes to my co-worker before she gets into work, which is around 9.30 am. Thanks.",
+            "date" : "2015-07-04 9 am ",
+            "delivery_address" : "900 W Eddy St, Chicago, IL 60613, United States",
+            "item" : "chocolate cupcake",
+            "pickup_address" : "1060 W Addison St, Chicago, IL 60613, United States",
+            "quantity" : 1,
+            "type" : "delivery"
+         }
+      },
+      "signatures" : {
+         "bitcoin" : "XXX",
+         "pgp" : "XXX"
+      }
+   }
+}
