@@ -7,7 +7,7 @@ Goods and services are bought and sold on _OpenBazaar_ using Bitcoin, a digital 
 
 **Bitcoin and _OpenBazaar_ together are the future on online commerce.**
 
-Right now, online commerce means using centralized services. eBay, Amazon, and other big companies have restrictive policies and charge fees for listing and selling goods. They only accept forms of payment that cost both buyers and sellers money, such as credit cards or PayPal. They require personal information, which can lead to it being stolen or even sold to others for advertising or worse. Buyers and sellers aren’t always free to exchange goods and services with each other, as companies and governments censor entire categories of trade.
+Right now, online commerce means using centralized services. eBay, Amazon, Alibaba and others have restrictive policies and charge fees for listing and selling goods. They only accept forms of payment that cost both buyers and sellers money, such as credit cards or PayPal/Alipay. They require personal information, which can lead to it being stolen or even sold to others for advertising or worse. Buyers and sellers aren’t always free to exchange goods and services with each other, as companies and governments censor entire categories of trade.
 
 _OpenBazaar_ is a different approach to online commerce. It puts the power back in the users’ hands. Instead of buyers and sellers going through a centralized service, _OpenBazaar_ connects them directly. Because there is no one in the middle of the transactions, there are no fees, no one can censor transactions, and you only reveal the personal information that you choose.
 
