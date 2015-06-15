@@ -1,4 +1,4 @@
-# 8. Reference Documentation
+# 8. References
 
 ## 8.1 Bitcoin
 
